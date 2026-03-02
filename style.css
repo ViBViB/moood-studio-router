@@ -65,11 +65,17 @@ body {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 0;
     padding-left: 0;
 }
 
+.toc ul li {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
 .toc a {
+    display: block;
+    padding: 12px 0;
     text-decoration: none;
     color: var(--text-main);
     font-size: 14px;
@@ -83,10 +89,12 @@ body {
 
 /* Main Content Styling */
 .content {
-    margin-left: 320px;
-    /* offset sidebar */
-    padding: 80px;
-    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 40px;
+    max-width: 1220px;
+    /* 900px content + 320px sidebar space */
+    padding-left: 360px;
+    /* Sidebar (320px) + Gap (40px) */
     width: 100%;
 }
 
