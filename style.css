@@ -15,7 +15,7 @@
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, inherit;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color: var(--bg-main);
     color: var(--text-main);
     line-height: 1.6;
@@ -38,8 +38,13 @@ body {
     overflow-y: auto;
 }
 
+.logo {
+    display: flex;
+    justify-content: center;
+}
+
 .logo img {
-    height: 32px;
+    height: 60px;
     max-width: 100%;
 }
 

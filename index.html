@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Figma Handoff Guide | Moood Studio Agency</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -55,7 +54,8 @@
                         <ul class="sublist">
                             <li class="bad">❌ Bad: <code>Color/Blue</code> or <code>Text/48px</code></li>
                             <li class="good">✅ Good: <code>Brand/Primary</code>, <code>Spacing/Section-Gap</code>,
-                                <code>Radius/Card</code></li>
+                                <code>Radius/Card</code>
+                            </li>
                         </ul>
                     </li>
                     <li><strong>Modes for Responsive Design:</strong> If design values change between Desktop and Mobile
@@ -76,11 +76,13 @@
                         detached typography.</li>
                     <li><strong>Clear Hierarchy:</strong> Group text styles semantically. (e.g.,
                         <code>Heading/Display</code>, <code>Heading/H1</code>, <code>Body/Standard</code>,
-                        <code>Body/Small</code>, <code>UI/Label</code>).</li>
+                        <code>Body/Small</code>, <code>UI/Label</code>).
+                    </li>
                     <li><strong>Mode-Linked Typography:</strong> Link numeric variables to your Text Styles. If
                         <code>Heading/H1</code> is <code>120px</code> in the "Desktop" mode and <code>48px</code> in the
                         "Mobile" mode, our system will automatically parse this and generate the perfect CSS
-                        <code>clamp()</code> rule.</li>
+                        <code>clamp()</code> rule.
+                    </li>
                 </ul>
             </section>
 
@@ -94,7 +96,8 @@
                         Layout.</li>
                     <li><strong>Resizing Rules:</strong> Accurately set elements to <strong>Hug contents</strong>,
                         <strong>Fill container</strong>, or <strong>Fixed width/height</strong>. Our engine translates
-                        "Fill container" directly to <code>width: 100%;</code> or <code>flex: 1;</code>.</li>
+                        "Fill container" directly to <code>width: 100%;</code> or <code>flex: 1;</code>.
+                    </li>
                     <li><strong>No "Hacks":</strong> Avoid using invisible spacer boxes. Use the native
                         <code>Gap</code>, <code>Padding</code>, and <code>Margin</code> properties within Auto Layout.
                     </li>
@@ -109,7 +112,8 @@
                     </li>
                     <li><strong>Logical Grouping:</strong> Frame your elements logically. A typical web section should
                         be structured as:
-                        <br><br><code>Section > Container (Max-Width) > Content Layout > Elements</code></li>
+                        <br><br><code>Section > Container (Max-Width) > Content Layout > Elements</code>
+                    </li>
                 </ul>
             </section>
 
@@ -124,7 +128,8 @@
                         <ul class="sublist">
                             <li>Icons and Logos: Set to <strong>SVG</strong>.</li>
                             <li>Photos/Complex Graphics: Set to <strong>PNG</strong>, <strong>JPG</strong>, or
-                                <strong>WebP</strong> (at @2x minimum).</li>
+                                <strong>WebP</strong> (at @2x minimum).
+                            </li>
                         </ul>
                     </li>
                     <li><strong>Clean Naming Convention:</strong> The name of the layer will be the exact name of the
@@ -132,7 +137,8 @@
                         <ul class="sublist">
                             <li class="bad">❌ Bad: <code>Rectangle 4323</code> or <code>Vector</code></li>
                             <li class="good">✅ Good: <code>hero-background-image</code>, <code>icon-arrow-right</code>,
-                                <code>logo-footer</code></li>
+                                <code>logo-footer</code>
+                            </li>
                         </ul>
                     </li>
                     <li><strong>Flatten Icons:</strong> Outline strokes (<code>Shift + Cmd + O</code>) and flatten
@@ -149,7 +155,8 @@
                     <li><strong>Component Properties:</strong> Use Variants, Boolean, and Text properties cleanly. Our
                         system maps Figma variants directly to CSS modifier classes.
                         <p class="example">e.g., A button component with properties
-                            <code>Variant: Primary / Secondary</code> and <code>State: Default / Hover</code>.</p>
+                            <code>Variant: Primary / Secondary</code> and <code>State: Default / Hover</code>.
+                        </p>
                     </li>
                 </ul>
             </section>
