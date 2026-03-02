@@ -4,225 +4,869 @@
     box-sizing: border-box;
 }
 
-:root {
-    --bg-main: #fcfcfc;
-    --sidebar-bg: #ffffff;
-    --text-main: #1d1d1f;
-    --text-muted: #86868b;
-    --border-color: #e5e5ea;
-    --accent: #007aff;
-    --accent-hover: #0056b3;
-}
-
 body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color: var(--bg-main);
-    color: var(--text-main);
-    line-height: 1.6;
-    letter-spacing: -0.015em;
+    overflow-x: hidden;
+    background: #fff;
+    color: #000;
+    padding-bottom: 100vh;
+    /* Space for CTA section to be revealed */
 }
 
-.layout {
-    display: flex;
-    min-height: 100vh;
+/* Hero Container */
+.hero-container {
+    min-height: calc(100vh + 1000px);
+    /* 100vh (masonry height) + 1000px (phases scroll distance) */
+    position: relative;
+    background: #fff;
+    z-index: 4;
+    /* Above masonry and content */
 }
 
-/* Sidebar Styling */
-.sidebar {
-    width: 320px;
-    background: var(--sidebar-bg);
-    border-right: 1px solid var(--border-color);
-    padding: 40px 32px;
+/* Masonry Wrapper - Full width background */
+.masonry-wrapper {
     position: fixed;
-    height: 100vh;
-    overflow-y: auto;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 200vh;
+    overflow: hidden;
+    z-index: 1;
+    /* Below content */
 }
 
-.logo {
+/* Masonry Container - Centered with 2D rotation */
+.masonry-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 120%;
+    transform: translate(-50%, -50%) rotate(-10deg);
+    /* -10deg rotation on Z axis - will animate to 0deg on scroll */
     display: flex;
-    justify-content: center;
+    gap: 16px;
+    height: 120%;
+    transition: transform 0.1s linear;
+    will-change: transform;
+    transform-style: preserve-3d;
 }
 
-.logo img {
-    height: 60px;
-    max-width: 100%;
+/* Gradient Overlay - Fades masonry to white */
+.masonry-gradient-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0) 25%,
+            rgba(255, 255, 255, 0.5) 40%,
+            rgba(255, 255, 255, 0.9) 50%,
+            rgba(255, 255, 255, 1) 60%,
+            rgba(255, 255, 255, 1) 100%);
+    opacity: 1;
+    pointer-events: none;
+    z-index: 2;
 }
 
-.toc {
-    margin-top: 48px;
-}
 
-.toc-title {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-    margin-bottom: 24px;
-    font-weight: 600;
-}
 
-.toc ul {
-    list-style: none;
+
+
+
+
+
+
+/* Individual Masonry Columns */
+.masonry-column {
     display: flex;
     flex-direction: column;
-    gap: 0;
-    padding-left: 0;
+    flex: 1;
+    animation-duration: 60s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
-.toc ul li {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+/* Alternate animation directions */
+.masonry-column[data-direction="up"] {
+    animation-name: scrollUp;
 }
 
-.toc a {
-    display: block;
-    padding: 12px 0;
-    text-decoration: none;
-    color: var(--text-main);
-    font-size: 14px;
-    font-weight: 500;
-    transition: color 0.2s ease;
+.masonry-column[data-direction="down"] {
+    animation-name: scrollDown;
 }
 
-.toc a:hover {
-    color: var(--accent);
-}
-
-/* Main Content Styling */
-.content {
-    margin: 0 auto;
-    padding: 80px 40px;
-    max-width: 1220px;
-    /* 900px content + 320px sidebar space */
-    padding-left: 360px;
-    /* Sidebar (320px) + Gap (40px) */
+/* Images in columns */
+.masonry-column img {
     width: 100%;
-}
-
-h1 {
-    font-size: 40px;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    margin-bottom: 12px;
-    line-height: 1.1;
-}
-
-h2 {
-    font-size: 24px;
-    font-weight: 600;
-    margin: 128px 0 24px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 12px;
-}
-
-.hero h2 {
-    font-size: 20px;
-    color: var(--text-muted);
-    font-weight: 400;
-    margin: 0 0 32px;
-    border: none;
-    padding: 0;
-}
-
-p {
-    margin-bottom: 24px;
-}
-
-.lead {
-    font-size: 18px;
-    color: #424245;
-}
-
-ul {
-    padding-left: 24px;
-    margin-bottom: 32px;
-}
-
-li {
-    margin-bottom: 12px;
-}
-
-code {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-    background: #f5f5f7;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 13px;
-    color: #cc0033;
-}
-
-.alert {
-    background: #f2f8fc;
-    border-left: 4px solid var(--accent);
-    padding: 24px;
-    border-radius: 0 8px 8px 0;
-    margin: 40px 0;
-}
-
-.alert p {
-    margin: 0;
-}
-
-.sublist {
-    margin-top: 12px;
-    list-style-type: circle;
-}
-
-.sublist .bad {
-    color: #d93025;
-}
-
-.sublist .good {
-    color: #1e8e3e;
-}
-
-.summary-box {
-    margin-top: 80px;
-    padding: 40px;
-    background: #f5f5f7;
-    border-radius: 16px;
-}
-
-.summary-box h3 {
-    margin-bottom: 24px;
-    font-size: 20px;
-}
-
-.summary-box ol {
-    margin-bottom: 32px;
-    padding-left: 20px;
-}
-
-.summary-box ol li {
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+    display: block;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     margin-bottom: 16px;
 }
 
-.final-word {
-    font-weight: 600;
-    margin: 0;
-    color: var(--accent);
-}
-
-/* Responsiveness */
-@media (max-width: 991px) {
-    .layout {
-        flex-direction: column;
+/* Scroll animations */
+@keyframes scrollUp {
+    from {
+        transform: translate3d(0, -33.33333333%, 0);
     }
 
-    .sidebar {
-        width: 100%;
+    to {
+        transform: translate3d(0, -66.66666667%, 0);
+    }
+}
+
+@keyframes scrollDown {
+    from {
+        transform: translate3d(0, -66.66666667%, 0);
+    }
+
+    to {
+        transform: translate3d(0, -33.33333333%, 0);
+    }
+}
+
+/* Content Wrapper - Overlay on top of masonry */
+.content-wrapper {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 45%;
+    height: 100vh;
+    z-index: 2;
+    background: #fff;
+    transition: none;
+    will-change: width, opacity;
+    overflow: hidden;
+}
+
+/* Content - Fixed to viewport, clipped by JavaScript */
+.content {
+    position: fixed;
+    left: calc(55% + 50px);
+    /* 55% is where container starts (100% - 45%), then 50px from that edge */
+    bottom: 50px;
+    width: 480px;
+    /* Fixed width - will be clipped by clip-path */
+    z-index: 3;
+    /* Above the container */
+}
+
+/* Logo in top right corner */
+.logo {
+    position: fixed;
+    top: 32px;
+    right: 32px;
+    z-index: 9999;
+    /* Always visible above all content */
+    color: #000;
+}
+
+.headline {
+    font-size: 72px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+    color: #000;
+}
+
+.description {
+    font-size: 18px;
+    line-height: 1.5;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 28px;
+    font-weight: 400;
+}
+
+.cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+    background: transparent;
+    border: 1.5px solid #000;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+    background: #000;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.cta-button:hover svg path {
+    stroke: #fff;
+}
+
+.scroll-down {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 32px;
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.scroll-down svg {
+    display: block;
+}
+
+/* Section 2: How it Works */
+.how-it-works {
+    position: relative;
+    padding: 120px 0;
+    padding-top: 160px;
+    /* Extra top padding for logo clearance */
+    background: #fff;
+    z-index: 50;
+    /* Above hero and masonry, below logo */
+}
+
+.section-container {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 40px;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 40px;
+    font-weight: 500;
+    margin-bottom: 48px;
+    letter-spacing: -0.01em;
+}
+
+/* ===== PROBLEM STATEMENT SECTION ===== */
+.problem-statement {
+    padding: 60px 80px 90px;
+    padding-top: 240px;
+    /* Increased from 120px to give more space from Scroll Down */
+    /* Extra top padding for logo clearance */
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 50;
+    /* Above hero and masonry, below logo */
+    min-height: 100vh;
+}
+
+.problem-content {
+    max-width: 1400px;
+    width: 100%;
+    text-align: left;
+}
+
+.problem-text {
+    font-size: 64px;
+    line-height: 1.3;
+    color: #666;
+    margin: 0 0 40px 0;
+    /* Reduced from 80px */
+    font-weight: 400;
+    letter-spacing: -0.02em;
+}
+
+.solution-text {
+    font-size: 72px;
+    line-height: 1.25;
+    color: #000;
+    margin: 0;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+}
+
+.emphasis-black {
+    color: #000;
+    margin-top: 40px;
+    /* Controlled vertical break */
+    margin-bottom: 0px;
+    /* Removed extra spacing */
+}
+
+.emphasis-gray {
+    color: #666;
+    margin-top: 40px;
+    /* Consistent vertical break */
+    margin-bottom: 0;
+}
+
+/* ===== HOW IT WORKS SECTION ===== */
+.video-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #F5F5F5;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 60px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    border: none;
+}
+
+.video-placeholder:hover {
+    transform: scale(1.01);
+}
+
+.play-button svg {
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+.video-placeholder:hover .play-button svg {
+    opacity: 0.8;
+}
+
+/* New Testimonials Layout */
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 40px;
+    margin-bottom: 80px;
+    align-items: center;
+}
+
+/* Left side: 3 small images stacked */
+.testimonials-images {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.testimonial-image {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+/* Right side: Large testimonial card */
+.testimonial-card {
+    padding: 48px;
+    background: #FAFAFA;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 320px;
+    position: relative;
+}
+
+.quote {
+    font-size: 22px;
+    line-height: 1.5;
+    color: #000;
+    margin-bottom: 32px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.name {
+    font-weight: 600;
+    font-size: 16px;
+    color: #000;
+}
+
+.role {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 400;
+}
+
+/* Navigation arrows */
+.testimonial-nav {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.nav-arrow {
+    width: 40px;
+    height: 40px;
+    border: 1.5px solid #000;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.nav-arrow:hover {
+    background: #000;
+}
+
+.nav-arrow:hover svg path {
+    stroke: #fff;
+}
+
+.final-cta {
+    margin-top: 40px;
+}
+
+.final-cta-heading {
+    font-size: 40px;
+    font-weight: 500;
+    margin-bottom: 28px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+}
+
+/* ===== FIXED BACKGROUND CONTAINER (CTA ONLY) ===== */
+.fixed-background {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    /* Only CTA section */
+    z-index: 0;
+    /* Behind everything */
+}
+
+
+/* ===== CTA SECTION ===== */
+.cta-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.95);
+    /* Semi-transparent white background */
+}
+
+/* CTA Masonry Wrapper - Full screen background */
+.cta-masonry-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* CTA Masonry Container - No rotation, completely vertical */
+.cta-masonry-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+    /* No rotation - completely vertical */
+    display: flex;
+    gap: 16px;
+    height: 120%;
+}
+
+/* CTA Masonry Columns */
+.cta-masonry-column {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 200px;
+    animation-duration: 40s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+/* Alternate animation directions */
+.cta-masonry-column[data-direction="up"] {
+    animation-name: scrollUp;
+}
+
+.cta-masonry-column[data-direction="down"] {
+    animation-name: scrollDown;
+}
+
+/* CTA Masonry Images - 10% opacity */
+.cta-masonry-column img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+    display: block;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    opacity: 0.1;
+    margin-bottom: 16px;
+}
+
+/* CTA Content - Centered */
+.cta-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 1100px;
+    /* Increased from 900px */
+    padding: 0 40px;
+}
+
+/* CTA Headline - Same size as main hero headline */
+.cta-headline {
+    font-size: 72px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 40px;
+    letter-spacing: -0.01em;
+    color: #000;
+}
+
+/* CTA Button - White background */
+.cta-content .cta-button {
+    background: #FFF;
+    white-space: nowrap;
+    /* Ensure label is always one line */
+}
+
+/* CTA Button Hover - Same as hero button */
+.cta-content .cta-button:hover {
+    background: #000;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.cta-content .cta-button:hover svg path {
+    stroke: #fff;
+}
+
+/* CTA Footer Text - Copyright and Disclaimer at bottom */
+.cta-footer-text {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    max-width: 800px;
+    padding: 0 40px;
+    z-index: 3;
+}
+
+.cta-copyright {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 8px;
+}
+
+.cta-disclaimer {
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(0, 0, 0, 0.4);
+    margin: 0;
+}
+
+/* Footer Section - In normal document flow */
+.footer {
+    position: relative;
+    width: 100%;
+    background: #fff;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 80px 0;
+    z-index: 5;
+    /* Above fixed background */
+}
+
+.footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+
+/* Large Viiibe! text logo on left */
+.footer-logo-text {
+    font-size: 120px;
+    font-weight: 300;
+    color: #F0F0F0;
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+}
+
+.footer-copyright {
+    font-size: 14px;
+    font-weight: 600;
+    color: #000;
+    letter-spacing: 0.02em;
+}
+
+.footer-disclaimer {
+    font-size: 11px;
+    line-height: 1.6;
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 400;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .testimonials-images {
+        flex-direction: row;
+        gap: 12px;
+    }
+
+    .testimonial-image {
+        width: calc(33.333% - 8px);
+    }
+
+    .section-title {
+        font-size: 32px;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .footer-logo-text {
+        font-size: 80px;
+        text-align: center;
+    }
+
+    .footer-content {
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-bottom: 0;
+    }
+
+    .hero-container {
+        height: 100dvh;
+        min-height: 0 !important;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .masonry-wrapper {
         position: relative;
+        height: 55dvh;
+        width: 100%;
+        flex-shrink: 0;
+    }
+
+    .masonry-gradient-overlay {
+        background: linear-gradient(to bottom,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0) 40%,
+                rgba(255, 255, 255, 0.7) 70%,
+                rgba(255, 255, 255, 1) 90%);
+    }
+
+    .masonry-container {
+        width: 130%;
+        gap: 8px;
+        transform: translate(-50%, -50%) rotate(0deg) !important;
+    }
+
+    .masonry-column {
+        min-width: 80px;
+        gap: 8px;
+    }
+
+    .content-wrapper {
+        position: relative;
+        width: 100%;
         height: auto;
-        padding: 32px 24px;
-        border-right: none;
-        border-bottom: 1px solid var(--border-color);
+        flex: 1;
+        padding: 24px;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 
     .content {
-        margin-left: 0;
-        padding: 40px 24px;
+        position: relative;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
     }
 
-    h1 {
+    .headline {
         font-size: 32px;
+        line-height: 1.1;
+        margin-bottom: 12px;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+    }
+
+    .description {
+        font-size: 16px;
+        line-height: 1.4;
+        margin-bottom: 24px;
+        color: rgba(0, 0, 0, 0.7);
+    }
+
+    .logo {
+        top: 20px;
+        right: 20px;
+    }
+
+    .logo svg {
+        width: 32px;
+        height: 25px;
+    }
+
+    .problem-statement {
+        padding: 80px 24px 60px;
+        /* Increased from 20px to give more space from Scroll Down on mobile */
+        min-height: auto;
+        text-align: left;
+    }
+
+    .problem-text {
+        font-size: 22px;
+        line-height: 1.4;
+        margin-bottom: 32px;
+        color: rgba(0, 0, 0, 0.6);
+        max-width: 100%;
+    }
+
+    .solution-text {
+        font-size: 24px;
+        line-height: 1.3;
+        text-align: left;
+        font-weight: 500;
+    }
+
+    .emphasis-black {
+        display: block;
+        margin-top: 24px;
+        /* Reduced for mobile */
+        color: #000;
+        font-weight: 500;
+    }
+
+    .emphasis-gray {
+        display: block;
+        margin-top: 24px;
+        /* Reduced for mobile */
+        color: rgba(0, 0, 0, 0.4);
+    }
+
+    .how-it-works {
+        padding: 40px 0;
+        overflow: hidden;
+    }
+
+    .carousel-item-caption {
+        font-size: 14px;
+        padding: 0 20px;
+    }
+
+    .fixed-background {
+        position: relative;
+        height: auto;
+    }
+
+    .cta-section {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: 100px 24px;
+        min-height: 100vh;
+        /* Ensure enough height to see everything */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        /* Prevent masonry overflow */
+    }
+
+    .cta-headline {
+        font-size: 36px;
+        margin-bottom: 32px;
+    }
+
+    .cta-footer-text {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        transform: none;
+        margin: 80px auto 40px;
+        /* Space above and bottom margin */
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+        text-align: center;
+    }
+
+    .footer-logo-text {
+        font-size: 48px;
+    }
+
+    .scroll-down {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        margin-top: auto;
+        padding-top: 24px;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.4);
+    }
+
+    .cta-masonry-container {
+        width: 130%;
+        height: 100%;
+        gap: 8px;
+    }
+
+    .cta-masonry-column {
+        min-width: 80px;
+        gap: 8px;
+    }
+
+    .cta-masonry-column img {
+        margin-bottom: 8px;
     }
 }

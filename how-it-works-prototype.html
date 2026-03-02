@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Viiibe! Works - Final Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: #fff;
+            color: #000;
+        }
+
+        /* Spacer to allow scrolling */
+        .spacer {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #999;
+        }
+
+        /* Container for the animation */
+        .how-it-works-container {
+            height: 300vh;
+            position: relative;
+        }
+
+        /* Sticky wrapper that stays in viewport */
+        .sticky-wrapper {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 50px;
+            gap: 40px;
+        }
+
+        /* Animation canvas */
+        .animation-canvas {
+            position: relative;
+            width: 100%;
+            height: 900px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Hero image that morphs into first carousel item */
+        .hero-image {
+            position: absolute;
+            background-image: url('images/hero.jpg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 16px;
+            transition: none;
+            z-index: 10;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            backface-visibility: hidden;
+            -webkit-font-smoothing: subpixel-antialiased;
+        }
+
+        /* Carousel viewport - shows limited items */
+        .carousel-viewport {
+            width: 100%;
+            max-width: 2400px;
+            height: auto;
+            overflow: hidden;
+            position: relative;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .carousel-viewport.active {
+            opacity: 1;
+        }
+
+        /* Carousel track - holds all items */
+        .carousel-track {
+            display: flex;
+            gap: 24px;
+            transition: transform 0.5s ease;
+        }
+
+        /* Carousel item wrapper */
+        .carousel-item-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+            height: 100%;
+        }
+
+        /* Carousel items */
+        .carousel-item {
+            width: 618px;
+            height: 678px;
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center;
+            border-radius: 16px;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            backface-visibility: hidden;
+            -webkit-font-smoothing: subpixel-antialiased;
+        }
+
+        .carousel-item-caption {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.4s ease 0.2s;
+        }
+
+        .carousel-item-wrapper.visible .carousel-item {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .carousel-item-wrapper.visible .carousel-item-caption {
+            opacity: 1;
+        }
+
+        .carousel-item-wrapper:nth-child(1) .carousel-item {
+            background-image: url('images/01.jpg');
+        }
+
+        .carousel-item-wrapper:nth-child(2) .carousel-item {
+            background-image: url('images/02.jpg');
+        }
+
+        .carousel-item-wrapper:nth-child(3) .carousel-item {
+            background-image: url('images/03.jpg');
+        }
+
+        .carousel-item-wrapper:nth-child(4) .carousel-item {
+            background-image: url('images/04.jpg');
+        }
+
+        .carousel-item-wrapper:nth-child(5) .carousel-item {
+            background-image: url('images/05.jpg');
+        }
+
+        .carousel-item-wrapper:nth-child(6) .carousel-item {
+            background-image: url('images/06.jpg');
+        }
+
+        .carousel-item-wrapper:nth-child(7) .carousel-item {
+            background-image: url('images/07.jpg');
+        }
+
+        .carousel-item-wrapper:nth-child(8) .carousel-item {
+            background-image: url('images/08.jpg');
+        }
+
+        .carousel-item-wrapper:nth-child(9) .carousel-item {
+            background-image: url('images/09.jpg');
+        }
+
+        .carousel-item-wrapper:nth-child(10) .carousel-item {
+            background-image: url('images/10.jpg');
+        }
+
+
+
+
+        /* Navigation arrows - centered below carousel */
+        .carousel-navigation {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .carousel-navigation.active {
+            opacity: 1;
+        }
+
+        .nav-arrow {
+            width: 60px;
+            height: 60px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+
+        .nav-arrow svg {
+            width: 60px;
+            height: 60px;
+        }
+
+        .nav-arrow:hover svg rect {
+            stroke-opacity: 0.6;
+        }
+
+        .nav-arrow:hover svg path {
+            stroke-width: 2;
+        }
+
+        .nav-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .nav-arrow:disabled:hover svg rect {
+            stroke-opacity: 0.3;
+        }
+
+        .nav-arrow:disabled:hover svg path {
+            stroke-width: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top spacer -->
+    <div class="spacer">
+        ↓ Scroll down to see the animation ↓
+    </div>
+
+    <!-- Main animation container -->
+    <div class="how-it-works-container" id="howItWorksContainer">
+        <div class="sticky-wrapper">
+            <!-- Animation canvas -->
+            <div class="animation-canvas" id="animationCanvas">
+                <!-- Hero Image (initial state) -->
+                <div class="hero-image" id="heroImage"></div>
+
+                <!-- Carousel viewport -->
+                <div class="carousel-viewport" id="carouselViewport">
+                    <div class="carousel-track" id="carouselTrack">
+                        <div class="carousel-item-wrapper" data-index="0">
+                            <div class="carousel-item"></div>
+                            <div class="carousel-item-caption">Describe the inspiration you need</div>
+                        </div>
+                        <div class="carousel-item-wrapper" data-index="1">
+                            <div class="carousel-item"></div>
+                            <div class="carousel-item-caption">Viiibe! generates a curated moodboard. Reload to get new
+                                results</div>
+                        </div>
+                        <div class="carousel-item-wrapper" data-index="2">
+                            <div class="carousel-item"></div>
+                            <div class="carousel-item-caption">Review and curate your moodboard</div>
+                        </div>
+                        <div class="carousel-item-wrapper" data-index="3">
+                            <div class="carousel-item"></div>
+                            <div class="carousel-item-caption">Viiibe! generates a color palette based on your selected
+                                images</div>
+                        </div>
+                        <div class="carousel-item-wrapper" data-index="4">
+                            <div class="carousel-item"></div>
+                            <div class="carousel-item-caption">Viiibe! gives you type scale suggestions</div>
+                        </div>
+                        <div class="carousel-item-wrapper" data-index="5">
+                            <div class="carousel-item"></div>
+                            <div class="carousel-item-caption">Select what you want to download, from moodboard to
+                                design fundamentals</div>
+                        </div>
+                        <div class="carousel-item-wrapper" data-index="6">
+                            <div class="carousel-item"></div>
+                            <div class="carousel-item-caption">Viiibe! creates your moodboard page</div>
+                        </div>
+                        <div class="carousel-item-wrapper" data-index="7">
+                            <div class="carousel-item"></div>
+                            <div class="carousel-item-caption">Your color palette is downloaded and linked with Figma
+                                styles</div>
+                        </div>
+                        <div class="carousel-item-wrapper" data-index="8">
+                            <div class="carousel-item"></div>
+                            <div class="carousel-item-caption">Type scale is ready for you to play with</div>
+                        </div>
+                        <div class="carousel-item-wrapper" data-index="9">
+                            <div class="carousel-item"></div>
+                            <div class="carousel-item-caption">Figma variables can also be downloaded</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation arrows - centered below -->
+            <div class="carousel-navigation" id="carouselNavigation">
+                <button class="nav-arrow prev" id="prevBtn">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0.5" y="0.5" width="59" height="59" rx="29.5" stroke="black" stroke-opacity="0.3" />
+                        <path d="M24 30L36 30M24 30L29 34.5M24 30L29 25.5" stroke="black" stroke-width="1.6"
+                            stroke-linecap="round" />
+                    </svg>
+                </button>
+                <button class="nav-arrow next" id="nextBtn">
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="-0.5" y="0.5" width="59" height="59" rx="29.5" transform="matrix(-1 0 0 1 59 0)"
+                            stroke="black" stroke-opacity="0.3" />
+                        <path d="M36 30L24 30M36 30L31 34.5M36 30L31 25.5" stroke="black" stroke-width="1.6"
+                            stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom spacer -->
+    <div class="spacer">
+        ↑ Scroll up to reverse the animation ↑
+    </div>
+
+    <script>
+        const container = document.getElementById('howItWorksContainer');
+        const heroImage = document.getElementById('heroImage');
+        const carouselViewport = document.getElementById('carouselViewport');
+        const carouselTrack = document.getElementById('carouselTrack');
+        const carouselItemWrappers = document.querySelectorAll('.carousel-item-wrapper');
+        const carouselNavigation = document.getElementById('carouselNavigation');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        let currentIndex = 0;
+        let ticking = false;
+        let isCarouselActive = false;
+
+        // Scroll-based animation
+        function handleScroll() {
+            const containerRect = container.getBoundingClientRect();
+            const containerHeight = container.offsetHeight;
+
+            const scrollProgress = Math.max(0, Math.min(1, -containerRect.top / (containerHeight - window.innerHeight)));
+
+            const transitionStart = 0.2;
+            const transitionEnd = 0.7;
+
+            let progress = 0;
+
+            if (scrollProgress < transitionStart) {
+                progress = 0;
+            } else if (scrollProgress > transitionEnd) {
+                progress = 1;
+            } else {
+                progress = (scrollProgress - transitionStart) / (transitionEnd - transitionStart);
+            }
+
+            // Check if carousel is navigated away from first item
+            const transform = carouselTrack.style.transform;
+            const translateX = transform ? parseFloat(transform.match(/-?\d+\.?\d*/)) : 0;
+            const isAtFirstItem = Math.abs(translateX) < 10;
+
+            // Only run hero animation if carousel is not active OR if it's at the first item
+            if (!isCarouselActive || isAtFirstItem) {
+                // Calculate hero image dimensions
+                const canvas = document.getElementById('animationCanvas');
+                const canvasRect = canvas.getBoundingClientRect();
+
+                // Final: 618x678 (carousel item size)
+                const finalWidth = 618;
+                const finalHeight = 678;
+
+                // Initial: 731x818 (hero size)
+                const initialWidth = 731;
+                const initialHeight = 818;
+
+                // Get carousel viewport position
+                const viewportRect = carouselViewport.getBoundingClientRect();
+                const canvasLeft = canvasRect.left;
+
+                // Calculate positions relative to canvas
+                // Initial: centered in canvas
+                const initialLeft = (canvasRect.width - initialWidth) / 2;
+
+                // Final: aligned with carousel viewport left edge (relative to canvas)
+                const finalLeft = viewportRect.left - canvasLeft;
+
+                // Interpolate
+                const currentWidth = initialWidth + (finalWidth - initialWidth) * progress;
+                const currentHeight = initialHeight + (finalHeight - initialHeight) * progress;
+                const currentLeft = initialLeft + (finalLeft - initialLeft) * progress;
+
+                // Apply to hero
+                heroImage.style.width = `${currentWidth}px`;
+                heroImage.style.height = `${currentHeight}px`;
+                heroImage.style.left = `${currentLeft}px`;
+
+                // Hide hero completely when morphing is done (with slight delay to avoid blink)
+                if (progress >= 0.98) {
+                    heroImage.style.display = 'none';
+                } else {
+                    heroImage.style.display = 'flex';
+                }
+            }
+
+            // Show carousel and navigation when animation completes
+            if (progress >= 0.95) {
+                if (!isCarouselActive) {
+                    isCarouselActive = true;
+                    carouselViewport.classList.add('active');
+                    carouselNavigation.classList.add('active');
+
+                    // Show first carousel item immediately (replaces hero)
+                    carouselItemWrappers[0].classList.add('visible');
+
+                    // Fade in other carousel items with delay
+                    carouselItemWrappers.forEach((wrapper, i) => {
+                        if (i > 0) {
+                            setTimeout(() => {
+                                wrapper.classList.add('visible');
+                            }, i * 100);
+                        }
+                    });
+                }
+            } else {
+                // Only reverse animation if carousel is at the first item
+                if (isCarouselActive && isAtFirstItem) {
+                    isCarouselActive = false;
+                    carouselViewport.classList.remove('active');
+                    carouselNavigation.classList.remove('active');
+                    // Remove visible class from all items
+                    carouselItemWrappers.forEach(wrapper => {
+                        wrapper.classList.remove('visible');
+                    });
+                }
+            }
+
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(handleScroll);
+                ticking = true;
+            }
+        });
+
+        // Carousel navigation
+        function goToSlide(index) {
+            currentIndex = index;
+
+            // Calculate max index where last item (10th) is fully visible
+            // Need to scroll enough to show the 10th item completely
+            const maxIndex = carouselItemWrappers.length - 3;
+            const clampedIndex = Math.min(index, maxIndex);
+
+            // Slide the track
+            const itemWidth = 618 + 24; // width + gap
+            carouselTrack.style.transform = `translateX(-${clampedIndex * itemWidth}px)`;
+
+            // Update navigation buttons
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index >= maxIndex;
+        }
+
+        // Event listeners
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                goToSlide(currentIndex - 1);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < carouselItemWrappers.length - 1) {
+                goToSlide(currentIndex + 1);
+            }
+        });
+
+        // Initial state
+        handleScroll();
+        goToSlide(0);
+    </script>
+</body>
+
+</html>

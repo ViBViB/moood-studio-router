@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viiibe Pro Unlocked! - Payment Success</title>
+    <link rel="stylesheet" href="/viiibe/style.css">
+    <style>
+        /* Override/Add specific styles for success page */
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            padding-bottom: 0;
+            overflow: hidden;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .success-page-wrapper {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            z-index: 100;
+        }
+
+        /* Re-implementing masonry specifically for this view */
+        .success-masonry-wrapper {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .success-masonry-container {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 100%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            gap: 16px;
+            height: 120%;
+        }
+
+        .success-masonry-col {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex: 1;
+            min-width: 150px;
+            animation-duration: 60s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        .success-masonry-col img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            object-fit: cover;
+            display: block;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            filter: blur(8px);
+            opacity: 0.2;
+        }
+
+        .success-masonry-col[data-dir="up"] {
+            animation-name: scrollUp;
+        }
+
+        .success-masonry-col[data-dir="down"] {
+            animation-name: scrollDown;
+        }
+
+        .success-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 900px;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .success-headline {
+            font-size: 72px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+            color: #000;
+            line-height: 1.1;
+        }
+
+        .success-subheadline {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 16px;
+            color: rgba(0, 0, 0, 0.7);
+            line-height: 1.4;
+        }
+
+        .success-description {
+            font-size: 16px;
+            color: rgba(0, 0, 0, 0.5);
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 550px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #F3F4F6;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #4B5563;
+            margin-bottom: 32px;
+        }
+
+        .status-badge.verifying {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .status-badge.success {
+            background: #ECFDF5;
+            color: #059669;
+        }
+
+        .spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid currentColor;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .cta-button {
+            background: #10B981;
+            color: #fff;
+            border: none;
+            padding: 18px 48px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+            filter: brightness(1.05);
+        }
+
+        .cta-button:disabled {
+            background: #E5E7EB;
+            color: #9CA3AF;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Scroll animations (ensure keyframes are present) */
+        @keyframes scrollUp {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-50%);
+            }
+        }
+
+        @keyframes scrollDown {
+            from {
+                transform: translateY(-50%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        /* Footer Text Styles copied from landing */
+        .cta-footer-text {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            max-width: 800px;
+            padding: 0 40px;
+            z-index: 3;
+            width: 100%;
+        }
+
+        .cta-copyright {
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(0, 0, 0, 0.6);
+            margin-bottom: 8px;
+        }
+
+        .cta-disclaimer {
+            font-size: 11px;
+            line-height: 1.5;
+            color: rgba(0, 0, 0, 0.4);
+            margin: 0;
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .success-headline {
+                font-size: 40px;
+            }
+
+            .success-content {
+                padding: 40px 20px;
+                width: 90%;
+            }
+
+            .success-subheadline {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="success-page-wrapper">
+        <!-- Masonry Background Component -->
+        <div class="success-masonry-wrapper">
+            <div class="success-masonry-container">
+                <!-- Column 1 -->
+                <div class="success-masonry-col" data-dir="up">
+                    <img src="/viiibe/images/masonry/01.png">
+                    <img src="/viiibe/images/masonry/02.png">
+                    <img src="/viiibe/images/masonry/03.png">
+                    <img src="/viiibe/images/masonry/04.png">
+                    <img src="/viiibe/images/masonry/05.png">
+                    <img src="/viiibe/images/masonry/01.png">
+                    <img src="/viiibe/images/masonry/02.png">
+                    <img src="/viiibe/images/masonry/03.png">
+                </div>
+                <!-- Column 2 -->
+                <div class="success-masonry-col" data-dir="down">
+                    <img src="/viiibe/images/masonry/06.png">
+                    <img src="/viiibe/images/masonry/07.png">
+                    <img src="/viiibe/images/masonry/08.png">
+                    <img src="/viiibe/images/masonry/09.png">
+                    <img src="/viiibe/images/masonry/10.png">
+                    <img src="/viiibe/images/masonry/06.png">
+                    <img src="/viiibe/images/masonry/07.png">
+                    <img src="/viiibe/images/masonry/08.png">
+                </div>
+                <!-- Column 3 -->
+                <div class="success-masonry-col" data-dir="up">
+                    <img src="/viiibe/images/masonry/11.png">
+                    <img src="/viiibe/images/masonry/12.png">
+                    <img src="/viiibe/images/masonry/13.png">
+                    <img src="/viiibe/images/masonry/14.png">
+                    <img src="/viiibe/images/masonry/15.png">
+                    <img src="/viiibe/images/masonry/11.png">
+                    <img src="/viiibe/images/masonry/12.png">
+                    <img src="/viiibe/images/masonry/13.png">
+                </div>
+                <!-- Column 4 -->
+                <div class="success-masonry-col" data-dir="down">
+                    <img src="/viiibe/images/masonry/16.png">
+                    <img src="/viiibe/images/masonry/17.png">
+                    <img src="/viiibe/images/masonry/18.png">
+                    <img src="/viiibe/images/masonry/19.png">
+                    <img src="/viiibe/images/masonry/20.png">
+                    <img src="/viiibe/images/masonry/16.png">
+                    <img src="/viiibe/images/masonry/17.png">
+                    <img src="/viiibe/images/masonry/18.png">
+                </div>
+                <!-- Column 5 -->
+                <div class="success-masonry-col" data-dir="up">
+                    <img src="/viiibe/images/masonry/21.png">
+                    <img src="/viiibe/images/masonry/22.png">
+                    <img src="/viiibe/images/masonry/23.png">
+                    <img src="/viiibe/images/masonry/24.png">
+                    <img src="/viiibe/images/masonry/25.png">
+                    <img src="/viiibe/images/masonry/21.png">
+                    <img src="/viiibe/images/masonry/22.png">
+                    <img src="/viiibe/images/masonry/23.png">
+                </div>
+                <!-- Column 6 -->
+                <div class="success-masonry-col" data-dir="down">
+                    <img src="/viiibe/images/masonry/26.png">
+                    <img src="/viiibe/images/masonry/27.png">
+                    <img src="/viiibe/images/masonry/28.png">
+                    <img src="/viiibe/images/masonry/29.png">
+                    <img src="/viiibe/images/masonry/30.png">
+                    <img src="/viiibe/images/masonry/26.png">
+                    <img src="/viiibe/images/masonry/27.png">
+                    <img src="/viiibe/images/masonry/28.png">
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Card -->
+        <div class="success-content">
+            <div id="statusBadge" class="status-badge verifying">
+                <span class="spinner" id="statusSpinner"></span>
+                <span id="statusText">Verifying your PRO status...</span>
+            </div>
+
+            <h1 id="headline" class="success-headline">Unlocking Viiibe...</h1>
+            <p id="subheadline" class="success-subheadline">One moment while we confirm your payment.</p>
+            <p id="description" class="success-description">This page will automatically close once your status is
+                verified.</p>
+        </div>
+
+        <!-- Copyright and Disclaimer at bottom (matching landing) -->
+        <div class="cta-footer-text">
+            <p class="cta-copyright">Moood!® 2025 All Rights Reserved</p>
+            <p class="cta-disclaimer">
+                Viiibe! generates AI-powered mood boards and design suggestions by analyzing visual content from
+                multiple sources. Viiibe! does not store, own, or claim any rights to the images displayed. All
+                visual content remains the property of its original creators and is attributed accordingly.
+                Typography and color recommendations are contextual suggestions based on your search query and AI
+                analysis, and may not reflect the exact styles present in the mood board images.
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('userId');
+
+        let pollAttempts = 0;
+        const MAX_POLLS = 30;
+        let pollingInterval = null;
+
+        async function checkStatus() {
+            if (!userId) {
+                updateUIError("No user ID found. Please check Figma.");
+                return;
+            }
+
+            pollAttempts++;
+            try {
+                const buster = Date.now();
+                const res = await fetch(`https://viiibe-backend.vercel.app/api/user-status?userId=${userId}&t=${buster}`);
+                const data = await res.json();
+
+                const isPro = data.isPro ||
+                    (data.raw_data && (data.raw_data.is_pro || data.raw_data.status === 'PRO_VERIFIED'));
+
+                if (isPro) {
+                    clearInterval(pollingInterval);
+                    onSuccess();
+                } else if (pollAttempts >= MAX_POLLS) {
+                    clearInterval(pollingInterval);
+                    updateUIWarning();
+                }
+            } catch (e) {
+                console.error("Poll error:", e);
+                if (pollAttempts >= MAX_POLLS) {
+                    clearInterval(pollingInterval);
+                    updateUIError("Verification failed. Try refreshing the plugin.");
+                }
+            }
+        }
+
+        function onSuccess() {
+            // Update Text
+            document.getElementById('headline').textContent = "Viiibe Pro Unlocked!";
+            document.getElementById('subheadline').textContent = "All premium features are now available in your plugin.";
+            document.getElementById('description').textContent = "You can close this page now and head back to Figma to get inspired with Viiibe!";
+
+            // Update Badge
+            const badge = document.getElementById('statusBadge');
+            badge.className = "status-badge success";
+            badge.innerHTML = "✅ PRO Status Activated";
+
+            // Confetti
+            fireConfetti();
+
+            // Notification to localstorage (legacy plugin check)
+            localStorage.setItem('viiibe_pro_activated', Date.now().toString());
+
+            // Auto close
+            setTimeout(() => window.close(), 6000);
+        }
+
+        function updateUIError(msg) {
+            document.getElementById('statusBadge').innerHTML = "⚠️ " + msg;
+            document.getElementById('statusBadge').className = "status-badge";
+        }
+
+        function updateUIWarning() {
+            document.getElementById('statusBadge').innerHTML = "⏳ Taking longer than expected...";
+            document.getElementById('statusBadge').className = "status-badge";
+        }
+
+        function fireConfetti() {
+            const count = 200;
+            const defaults = { origin: { y: 0.7 } };
+
+            function fire(particleRatio, opts) {
+                confetti({
+                    ...defaults,
+                    ...opts,
+                    particleCount: Math.floor(count * particleRatio)
+                });
+            }
+
+            fire(0.25, { spread: 26, startVelocity: 55 });
+            fire(0.2, { spread: 60 });
+            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+            fire(0.1, { spread: 120, startVelocity: 45 });
+        }
+
+        // Start polling
+        pollingInterval = setInterval(checkStatus, 2000);
+        checkStatus();
+
+        // Initial small celebrate
+        setTimeout(() => {
+            confetti({ particleCount: 50, spread: 50, origin: { y: 0.8 }, colors: ['#C9F687', '#000'] });
+        }, 500);
+    </script>
+</body>
+
+</html>

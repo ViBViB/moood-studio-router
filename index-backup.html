@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viiibe - Stop Scrolling Pinterest. Start Designing.</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="how-it-works.css">
+</head>
+
+<body>
+    <div class="hero-container">
+        <!-- Left Column: Animated Masonry -->
+        <div class="masonry-wrapper">
+            <div class="masonry-container" id="masonryContainer">
+                <!-- Column 1 - Moves UP -->
+                <div class="masonry-column" data-direction="up">
+                    <img src="images/masonry/01.png" alt="Design 1">
+                    <img src="images/masonry/02.png" alt="Design 2">
+                    <img src="images/masonry/03.png" alt="Design 3">
+                    <img src="images/masonry/04.png" alt="Design 4">
+                    <img src="images/masonry/05.png" alt="Design 5">
+                    <!-- Duplicate for seamless loop -->
+                    <img src="images/masonry/01.png" alt="Design 1">
+                    <img src="images/masonry/02.png" alt="Design 2">
+                    <img src="images/masonry/03.png" alt="Design 3">
+                    <img src="images/masonry/04.png" alt="Design 4">
+                    <img src="images/masonry/05.png" alt="Design 5">
+                </div>
+
+                <!-- Column 2 - Moves DOWN -->
+                <div class="masonry-column" data-direction="down">
+                    <img src="images/masonry/06.png" alt="Design 6">
+                    <img src="images/masonry/07.png" alt="Design 7">
+                    <img src="images/masonry/08.png" alt="Design 8">
+                    <img src="images/masonry/09.png" alt="Design 9">
+                    <img src="images/masonry/10.png" alt="Design 10">
+                    <!-- Duplicate for seamless loop -->
+                    <img src="images/masonry/06.png" alt="Design 6">
+                    <img src="images/masonry/07.png" alt="Design 7">
+                    <img src="images/masonry/08.png" alt="Design 8">
+                    <img src="images/masonry/09.png" alt="Design 9">
+                    <img src="images/masonry/10.png" alt="Design 10">
+                </div>
+
+                <!-- Column 3 - Moves UP -->
+                <div class="masonry-column" data-direction="up">
+                    <img src="images/masonry/11.png" alt="Design 11">
+                    <img src="images/masonry/12.png" alt="Design 12">
+                    <img src="images/masonry/13.png" alt="Design 13">
+                    <img src="images/masonry/14.png" alt="Design 14">
+                    <img src="images/masonry/15.png" alt="Design 15">
+                    <!-- Duplicate for seamless loop -->
+                    <img src="images/masonry/11.png" alt="Design 11">
+                    <img src="images/masonry/12.png" alt="Design 12">
+                    <img src="images/masonry/13.png" alt="Design 13">
+                    <img src="images/masonry/14.png" alt="Design 14">
+                    <img src="images/masonry/15.png" alt="Design 15">
+                </div>
+
+                <!-- Column 4 - Moves DOWN -->
+                <div class="masonry-column" data-direction="down">
+                    <img src="images/masonry/16.png" alt="Design 16">
+                    <img src="images/masonry/17.png" alt="Design 17">
+                    <img src="images/masonry/18.png" alt="Design 18">
+                    <img src="images/masonry/19.png" alt="Design 19">
+                    <img src="images/masonry/20.png" alt="Design 20">
+                    <!-- Duplicate for seamless loop -->
+                    <img src="images/masonry/16.png" alt="Design 16">
+                    <img src="images/masonry/17.png" alt="Design 17">
+                    <img src="images/masonry/18.png" alt="Design 18">
+                    <img src="images/masonry/19.png" alt="Design 19">
+                    <img src="images/masonry/20.png" alt="Design 20">
+                </div>
+
+                <!-- Column 5 - Moves UP -->
+                <div class="masonry-column" data-direction="up">
+                    <img src="images/masonry/21.png" alt="Design 21">
+                    <img src="images/masonry/22.png" alt="Design 22">
+                    <img src="images/masonry/23.png" alt="Design 23">
+                    <img src="images/masonry/24.png" alt="Design 24">
+                    <img src="images/masonry/25.png" alt="Design 25">
+                    <!-- Duplicate for seamless loop -->
+                    <img src="images/masonry/21.png" alt="Design 21">
+                    <img src="images/masonry/22.png" alt="Design 22">
+                    <img src="images/masonry/23.png" alt="Design 23">
+                    <img src="images/masonry/24.png" alt="Design 24">
+                    <img src="images/masonry/25.png" alt="Design 25">
+                </div>
+
+                <!-- Column 6 - Moves DOWN -->
+                <div class="masonry-column" data-direction="down">
+                    <img src="images/masonry/26.png" alt="Design 26">
+                    <img src="images/masonry/27.png" alt="Design 27">
+                    <img src="images/masonry/28.png" alt="Design 28">
+                    <img src="images/masonry/29.png" alt="Design 29">
+                    <img src="images/masonry/30.png" alt="Design 30">
+                    <!-- Duplicate for seamless loop -->
+                    <img src="images/masonry/26.png" alt="Design 26">
+                    <img src="images/masonry/27.png" alt="Design 27">
+                    <img src="images/masonry/28.png" alt="Design 28">
+                    <img src="images/masonry/29.png" alt="Design 29">
+                    <img src="images/masonry/30.png" alt="Design 30">
+                </div>
+            </div>
+
+            <!-- White gradient overlay - fades masonry to white as it scrolls down -->
+            <div class="masonry-gradient-overlay"></div>
+        </div>
+
+        <!-- Right Column: Content -->
+        <div class="content-wrapper" id="contentWrapper">
+            <div class="content">
+                <h1 class="headline">
+                    Stop Scrolling Pinterest to be Inspired.
+                </h1>
+
+                <p class="description">
+                    Describe the inspiration you need, and Viiibe! will generate a production-ready mood board with
+                    color palette, type scale, and variables. Right inside Figma
+                </p>
+
+                <button class="cta-button">
+                    <svg width="22" height="32" viewBox="0 0 22 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M0 26.6667C0 23.7212 2.38784 21.3334 5.33333 21.3334H10.6667V26.6667C10.6667 29.6122 8.27883 32 5.33333 32C2.38784 32 0 29.6122 0 26.6667Z"
+                            fill="#24CB71" />
+                        <path
+                            d="M10.6667 0V10.6667H16C18.9455 10.6667 21.3334 8.27883 21.3334 5.33333C21.3334 2.38784 18.9455 0 16 0H10.6667Z"
+                            fill="#FF7237" />
+                        <path
+                            d="M15.9555 21.3333C18.901 21.3333 21.2889 18.9455 21.2889 16C21.2889 13.0544 18.901 10.6666 15.9555 10.6666C13.01 10.6666 10.6222 13.0544 10.6222 16C10.6222 18.9455 13.01 21.3333 15.9555 21.3333Z"
+                            fill="#00B6FF" />
+                        <path
+                            d="M0 5.33333C0 8.27883 2.38784 10.6667 5.33333 10.6667H10.6667V0H5.33333C2.38784 0 0 2.38784 0 5.33333Z"
+                            fill="#FF3737" />
+                        <path
+                            d="M0 16C0 18.9455 2.38784 21.3333 5.33333 21.3333H10.6667V10.6666H5.33333C2.38784 10.6666 0 13.0545 0 16Z"
+                            fill="#874FFF" />
+                    </svg>
+                    Install the Free Figma Plugin
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 12H18M18 12L13 7M18 12L13 17" stroke="black" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                </button>
+
+                <div class="scroll-down">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.375 12.8333L12 17M12 17L7.625 12.8333M12 17L12 7" stroke="rgba(0,0,0,0.4)"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span>Keep going</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logo in top right corner -->
+        <div class="logo">
+            <svg width="48" height="38" viewBox="0 0 48 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M41.4231 14.3252C44.4651 12.8078 45.8856 9.18855 44.6261 6.01822C43.7571 3.8069 41.5716 2.27344 39.2352 2.03122C39.2352 2.03122 35.2938 2.01213 33.3231 2.01464C30.1997 2.01862 27.6186 2.04383 27.5881 2.07102M41.4231 14.3252C34.3238 16.7217 30.8691 7.87304 28.139 3.16544C27.8056 2.59103 27.5576 2.09822 27.5881 2.07102M41.4231 14.3252L28.5793 33.3455C26.4637 36.4786 21.8255 36.4019 19.8145 33.2007L2.34788 5.39631C1.42278 3.92368 2.45386 2.01496 4.19292 2.00474C4.74306 2.00151 5.33334 1.99967 5.95208 2.00005C7.95224 2.00134 9.77505 2.05576 9.77505 2.05576M27.5881 2.07102L9.77505 2.05576M9.77505 2.05576C12.3076 2.39358 16.3691 4.63173 18.3316 7.6794C21.5076 12.6116 28.6443 23.4847 31.9579 28.3422"
+                    stroke="black" stroke-width="4" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Problem Statement Section -->
+    <section class="problem-statement">
+        <div class="problem-content">
+            <p class="problem-text">
+                We designers waste 60% of our time on repetitive tasks—15+ hours a week just searching for inspiration.
+                Endless scrolling through Pinterest and Dribbble, never quite finding the right vibe.
+            </p>
+            <p class="problem-text emphasis-black">Until now.</p>
+
+            <p class="solution-text">
+                Viiibe! understands your creative intent and generates everything you need to get inspired and fire up
+                your creativity.
+            </p>
+            <p class="solution-text emphasis-gray">Right inside Figma.</p>
+        </div>
+    </section>
+
+    <!-- Second Section: How it Works -->
+    <section class="how-it-works" id="howItWorks">
+        <div class="how-it-works-container" id="howItWorksContainer">
+            <div class="sticky-wrapper">
+                <!-- Animation canvas -->
+                <div class="animation-canvas" id="animationCanvas">
+                    <!-- Carousel viewport -->
+                    <div class="carousel-viewport" id="carouselViewport">
+                        <div class="carousel-track" id="carouselTrack">
+                            <div class="carousel-item-wrapper" data-index="0">
+                                <div class="carousel-item"></div>
+                                <div class="carousel-item-caption">Describe the inspiration you need</div>
+                            </div>
+                            <div class="carousel-item-wrapper" data-index="1">
+                                <div class="carousel-item"></div>
+                                <div class="carousel-item-caption">Viiibe! generates a curated moodboard based on your
+                                    description</div>
+                            </div>
+                            <div class="carousel-item-wrapper" data-index="2">
+                                <div class="carousel-item"></div>
+                                <div class="carousel-item-caption">Review and curate your moodboard</div>
+                            </div>
+                            <div class="carousel-item-wrapper" data-index="3">
+                                <div class="carousel-item"></div>
+                                <div class="carousel-item-caption">Viiibe! generates a color palette based on your
+                                    selected images</div>
+                            </div>
+                            <div class="carousel-item-wrapper" data-index="4">
+                                <div class="carousel-item"></div>
+                                <div class="carousel-item-caption">Viiibe! gives you type scale suggestions</div>
+                            </div>
+                            <div class="carousel-item-wrapper" data-index="5">
+                                <div class="carousel-item"></div>
+                                <div class="carousel-item-caption">Select what you want to download, from moodboard to
+                                    design fundamentals</div>
+                            </div>
+                            <div class="carousel-item-wrapper" data-index="6">
+                                <div class="carousel-item"></div>
+                                <div class="carousel-item-caption">Viiibe! creates your moodboard page</div>
+                            </div>
+                            <div class="carousel-item-wrapper" data-index="7">
+                                <div class="carousel-item"></div>
+                                <div class="carousel-item-caption">Your color palette is downloaded and linked with
+                                    Figma styles</div>
+                            </div>
+                            <div class="carousel-item-wrapper" data-index="8">
+                                <div class="carousel-item"></div>
+                                <div class="carousel-item-caption">Type scale is ready for you to play with</div>
+                            </div>
+                            <div class="carousel-item-wrapper" data-index="9">
+                                <div class="carousel-item"></div>
+                                <div class="carousel-item-caption">Figma variables can also be downloaded</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation arrows - centered below -->
+                <div class="carousel-navigation" id="carouselNavigation">
+                    <button class="nav-arrow prev" id="prevBtn">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="30" cy="30" r="29.5" stroke="black" stroke-opacity="0.3" />
+                            <path d="M24 30L36 30M24 30L29 34.5M24 30L29 25.5" stroke="black" stroke-width="1.6"
+                                stroke-linecap="round" />
+                        </svg>
+                    </button>
+                    <button class="nav-arrow next" id="nextBtn">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="30" cy="30" r="29.5" stroke="black" stroke-opacity="0.3" />
+                            <path d="M36 30L24 30M36 30L31 34.5M36 30L31 25.5" stroke="black" stroke-width="1.6"
+                                stroke-linecap="round" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-masonry-wrapper">
+            <div class="cta-masonry-container" id="ctaMasonryContainer">
+                <!-- Column 1 - Moves UP -->
+                <div class="cta-masonry-column" data-direction="up">
+                    <img src="images/masonry/01.png" alt="Design 1">
+                    <img src="images/masonry/02.png" alt="Design 2">
+                    <img src="images/masonry/03.png" alt="Design 3">
+                    <img src="images/masonry/04.png" alt="Design 4">
+                    <img src="images/masonry/05.png" alt="Design 5">
+                    <!-- Duplicate for seamless loop -->
+                    <img src="images/masonry/01.png" alt="Design 1">
+                    <img src="images/masonry/02.png" alt="Design 2">
+                    <img src="images/masonry/03.png" alt="Design 3">
+                    <img src="images/masonry/04.png" alt="Design 4">
+                    <img src="images/masonry/05.png" alt="Design 5">
+                </div>
+
+                <!-- Column 2 - Moves DOWN -->
+                <div class="cta-masonry-column" data-direction="down">
+                    <img src="images/masonry/06.png" alt="Design 6">
+                    <img src="images/masonry/07.png" alt="Design 7">
+                    <img src="images/masonry/08.png" alt="Design 8">
+                    <img src="images/masonry/09.png" alt="Design 9">
+                    <img src="images/masonry/10.png" alt="Design 10">
+                    <!-- Duplicate for seamless loop -->
+                    <img src="images/masonry/06.png" alt="Design 6">
+                    <img src="images/masonry/07.png" alt="Design 7">
+                    <img src="images/masonry/08.png" alt="Design 8">
+                    <img src="images/masonry/09.png" alt="Design 9">
+                    <img src="images/masonry/10.png" alt="Design 10">
+                </div>
+
+                <!-- Column 3 - Moves UP -->
+                <div class="cta-masonry-column" data-direction="up">
+                    <img src="images/masonry/11.png" alt="Design 11">
+                    <img src="images/masonry/12.png" alt="Design 12">
+                    <img src="images/masonry/13.png" alt="Design 13">
+                    <img src="images/masonry/14.png" alt="Design 14">
+                    <img src="images/masonry/15.png" alt="Design 15">
+                    <!-- Duplicate for seamless loop -->
+                    <img src="images/masonry/11.png" alt="Design 11">
+                    <img src="images/masonry/12.png" alt="Design 12">
+                    <img src="images/masonry/13.png" alt="Design 13">
+                    <img src="images/masonry/14.png" alt="Design 14">
+                    <img src="images/masonry/15.png" alt="Design 15">
+                </div>
+
+                <!-- Column 4 - Moves DOWN -->
+                <div class="cta-masonry-column" data-direction="down">
+                    <img src="images/masonry/16.png" alt="Design 16">
+                    <img src="images/masonry/17.png" alt="Design 17">
+                    <img src="images/masonry/18.png" alt="Design 18">
+                    <img src="images/masonry/19.png" alt="Design 19">
+                    <img src="images/masonry/20.png" alt="Design 20">
+                    <!-- Duplicate for seamless loop -->
+                    <img src="images/masonry/16.png" alt="Design 16">
+                    <img src="images/masonry/17.png" alt="Design 17">
+                    <img src="images/masonry/18.png" alt="Design 18">
+                    <img src="images/masonry/19.png" alt="Design 19">
+                    <img src="images/masonry/20.png" alt="Design 20">
+                </div>
+
+                <!-- Column 5 - Moves UP -->
+                <div class="cta-masonry-column" data-direction="up">
+                    <img src="images/masonry/21.png" alt="Design 21">
+                    <img src="images/masonry/22.png" alt="Design 22">
+                    <img src="images/masonry/23.png" alt="Design 23">
+                    <img src="images/masonry/24.png" alt="Design 24">
+                    <img src="images/masonry/25.png" alt="Design 25">
+                    <!-- Duplicate for seamless loop -->
+                    <img src="images/masonry/21.png" alt="Design 21">
+                    <img src="images/masonry/22.png" alt="Design 22">
+                    <img src="images/masonry/23.png" alt="Design 23">
+                    <img src="images/masonry/24.png" alt="Design 24">
+                    <img src="images/masonry/25.png" alt="Design 25">
+                </div>
+
+                <!-- Column 6 - Moves DOWN -->
+                <div class="cta-masonry-column" data-direction="down">
+                    <img src="images/masonry/26.png" alt="Design 26">
+                    <img src="images/masonry/27.png" alt="Design 27">
+                    <img src="images/masonry/28.png" alt="Design 28">
+                    <img src="images/masonry/29.png" alt="Design 29">
+                    <img src="images/masonry/30.png" alt="Design 30">
+                    <!-- Duplicate for seamless loop -->
+                    <img src="images/masonry/26.png" alt="Design 26">
+                    <img src="images/masonry/27.png" alt="Design 27">
+                    <img src="images/masonry/28.png" alt="Design 28">
+                    <img src="images/masonry/29.png" alt="Design 29">
+                    <img src="images/masonry/30.png" alt="Design 30">
+                </div>
+            </div>
+        </div>
+
+        <!-- Centered CTA Content -->
+        <div class="cta-content">
+            <h2 class="cta-headline">Aren't you tired of scrolling Pinterest for inspiration?</h2>
+            <button class="cta-button">
+                <svg width="22" height="32" viewBox="0 0 22 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M0 26.6667C0 23.7212 2.38784 21.3334 5.33333 21.3334H10.6667V26.6667C10.6667 29.6122 8.27883 32 5.33333 32C2.38784 32 0 29.6122 0 26.6667Z"
+                        fill="#24CB71" />
+                    <path
+                        d="M10.6667 0V10.6667H16C18.9455 10.6667 21.3334 8.27883 21.3334 5.33333C21.3334 2.38784 18.9455 0 16 0H10.6667Z"
+                        fill="#FF7237" />
+                    <path
+                        d="M15.9555 21.3333C18.901 21.3333 21.2889 18.9455 21.2889 16C21.2889 13.0544 18.901 10.6666 15.9555 10.6666C13.01 10.6666 10.6222 13.0544 10.6222 16C10.6222 18.9455 13.01 21.3333 15.9555 21.3333Z"
+                        fill="#00B6FF" />
+                    <path
+                        d="M0 5.33333C0 8.27883 2.38784 10.6667 5.33333 10.6667H10.6667V0H5.33333C2.38784 0 0 2.38784 0 5.33333Z"
+                        fill="#FF3737" />
+                    <path
+                        d="M0 16C0 18.9455 2.38784 21.3333 5.33333 21.3333H10.6667V10.6666H5.33333C2.38784 10.6666 0 13.0545 0 16Z"
+                        fill="#874FFF" />
+                </svg>
+                Install the Free Figma Plugin
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 12H18M18 12L13 7M18 12L13 17" stroke="black" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Left: Large Viiibe! Text -->
+            <div class="footer-logo-text">Viiibe!</div>
+
+            <!-- Right: Copyright and Disclaimer -->
+            <div class="footer-content">
+                <p class="footer-copyright">Moood!® 2025 All Rights Reserved</p>
+                <p class="footer-disclaimer">
+                    Viiibe! generates AI-powered mood boards and design suggestions by analyzing visual content from
+                    multiple sources. Viiibe! does not store, own, or claim any rights to the images displayed. All
+                    visual content remains the property of its original creators and is attributed accordingly.
+                    Typography and color recommendations are contextual suggestions based on your search query and AI
+                    analysis, and may not reflect the exact styles present in the mood board images.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="how-it-works.js"></script>
+</body>
+
+</html>

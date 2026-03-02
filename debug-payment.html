@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viiibe Payment Debugger</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #111;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #000;
+        }
+
+        button {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #000;
+        }
+
+        .result h3 {
+            margin-bottom: 15px;
+            color: #111;
+        }
+
+        .result pre {
+            background: #fff;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .status.pro {
+            background: #10B981;
+            color: white;
+        }
+
+        .status.free {
+            background: #EF4444;
+            color: white;
+        }
+
+        .error {
+            background: #FEE2E2;
+            border-left-color: #EF4444;
+            color: #991B1B;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .info-box {
+            background: #EFF6FF;
+            border: 1px solid #BFDBFE;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .info-box p {
+            color: #1E40AF;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔍 Viiibe Payment Debugger</h1>
+        <p class="subtitle">Check your payment and PRO status</p>
+
+        <div class="info-box">
+            <p><strong>How to find your User ID:</strong></p>
+            <p>1. Open the Viiibe plugin in Figma</p>
+            <p>2. Open Developer Tools (Console)</p>
+            <p>3. Look for: <code>📨 Received figma-user-init: { userId: "..." }</code></p>
+            <p>4. Copy the userId and paste it below</p>
+        </div>
+
+        <div class="input-group">
+            <label for="userId">Figma User ID</label>
+            <input type="text" id="userId" placeholder="e.g., 391237238395566146" value="">
+        </div>
+
+        <button onclick="checkStatus()" id="checkBtn">Check Status</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Try to get userId from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const userIdFromUrl = urlParams.get('userId');
+        if (userIdFromUrl) {
+            document.getElementById('userId').value = userIdFromUrl;
+        }
+
+        async function checkStatus() {
+            const userId = document.getElementById('userId').value.trim();
+            const resultDiv = document.getElementById('result');
+            const checkBtn = document.getElementById('checkBtn');
+
+            if (!userId) {
+                resultDiv.innerHTML = '<div class="result error"><h3>Error</h3><p>Please enter a User ID</p></div>';
+                return;
+            }
+
+            checkBtn.disabled = true;
+            resultDiv.innerHTML = '<div class="loading">🔄 Checking status...</div>';
+
+            try {
+                // Check debug endpoint
+                const debugResponse = await fetch(`https://viiibe-backend.vercel.app/api/debug-user?userId=${userId}`);
+                const debugData = await debugResponse.json();
+
+                // Check user-status endpoint
+                const statusResponse = await fetch(`https://viiibe-backend.vercel.app/api/user-status?userId=${userId}&t=${Date.now()}`);
+                const statusData = await statusResponse.json();
+
+                const isPro = statusData.isPro ||
+                    (statusData.debug && statusData.debug.is_pro_val) ||
+                    (statusData.raw_data && statusData.raw_data.is_pro) ||
+                    false;
+
+                let html = '<div class="result">';
+                html += `<h3>Status for User: ${userId} <span class="status ${isPro ? 'pro' : 'free'}">${isPro ? 'PRO' : 'FREE'}</span></h3>`;
+
+                html += '<h4 style="margin-top: 20px; margin-bottom: 10px;">User Status Response:</h4>';
+                html += `<pre>${JSON.stringify(statusData, null, 2)}</pre>`;
+
+                html += '<h4 style="margin-top: 20px; margin-bottom: 10px;">Database Debug Info:</h4>';
+                html += `<pre>${JSON.stringify(debugData, null, 2)}</pre>`;
+
+                if (!isPro) {
+                    html += '<div style="margin-top: 20px; padding: 15px; background: #FEF3C7; border-radius: 6px;">';
+                    html += '<p style="color: #92400E;"><strong>⚠️ Not PRO Yet</strong></p>';
+                    html += '<p style="color: #92400E; margin-top: 8px;">Possible reasons:</p>';
+                    html += '<ul style="color: #92400E; margin-top: 8px; margin-left: 20px;">';
+                    html += '<li>Stripe webhook hasn\'t fired yet (can take up to 60 seconds)</li>';
+                    html += '<li>Webhook is not configured in Stripe dashboard</li>';
+                    html += '<li>User ID mismatch between payment and plugin</li>';
+                    html += '</ul>';
+                    html += '</div>';
+                }
+
+                html += '</div>';
+                resultDiv.innerHTML = html;
+
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error"><h3>Error</h3><pre>${error.message}</pre></div>`;
+            } finally {
+                checkBtn.disabled = false;
+            }
+        }
+
+        // Auto-check if userId is in URL
+        if (userIdFromUrl) {
+            setTimeout(() => checkStatus(), 500);
+        }
+    </script>
+</body>
+
+</html>
