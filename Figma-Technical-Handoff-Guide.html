@@ -25,6 +25,7 @@
                     <li><a href="#spacing">4. Spacing and Structure</a></li>
                     <li><a href="#assets">5. Asset Export Config</a></li>
                     <li><a href="#components">6. Component Architecture</a></li>
+                    <li><a href="#semantic">7. Semantic Design &#x26A1;</a></li>
                 </ul>
             </nav>
         </aside>
@@ -159,6 +160,143 @@
                         </p>
                     </li>
                 </ul>
+            </section>
+
+            <section id="semantic">
+                <h2>7. Semantic Design &mdash; The Layer Designers Often Skip</h2>
+                <p>This is the chapter most Figma files fail at &mdash; and the one with the highest impact on the final
+                    product.</p>
+                <div class="alert warning">
+                    <p>Our pipeline reads your Figma file as a <strong>source of truth</strong>. If a text element is
+                        labeled <code>H3</code> in Figma but visually looks like a page title, our agents will code it
+                        as an <code>H3</code> &mdash; not an <code>H1</code>. The visual appearance and the semantic
+                        role <em>must</em> match. When they don&rsquo;t, the resulting code can silently break SEO,
+                        accessibility, and screen reader compatibility.</p>
+                </div>
+
+                <h3>What is Semantic Design?</h3>
+                <p>Semantic Design means every element in Figma is named and structured according to its
+                    <strong>function and role in the content hierarchy</strong> &mdash; not just its visual appearance.
+                    A &ldquo;big bold headline&rdquo; and an &ldquo;H1&rdquo; are not the same thing. One describes how
+                    it looks. The other describes what it <em>is</em> and where it belongs in the structure of a
+                    document.</p>
+                <p>Search engines, screen readers, and our AI coding agents all rely on this layer of meaning to
+                    correctly interpret your design. When it&rsquo;s missing or inconsistent, the final code produces
+                    pages that can rank poorly, fail accessibility audits, and require expensive post-production
+                    corrections.</p>
+
+                <h3>The Heading Chain &mdash; The Most Common Failure Point</h3>
+                <p>HTML defines six levels of headings: <code>H1</code> through <code>H6</code>. Each page should have
+                    <strong>exactly one H1</strong> (the main topic of the page), followed by a logical hierarchy of H2s
+                    (sections), H3s (sub-sections), and so on. Skipping levels or using heading levels purely for size
+                    creates an incoherent document structure.</p>
+                <ul>
+                    <li><strong>One H1 per page:</strong> It represents the primary topic. There must be only one.
+                        Design accordingly &mdash; even if multiple large text elements exist on the page, only one can
+                        hold the H1 semantic role.
+                        <ul class="sublist">
+                            <li class="bad">&cross; Bad: Hero headline labeled <code>Heading/Display</code> + section
+                                title also labeled <code>Heading/Display</code></li>
+                            <li class="good">&check; Good: Hero headline labeled <code>Heading/H1</code> &middot;
+                                Section title labeled <code>Heading/H2</code></li>
+                        </ul>
+                    </li>
+                    <li><strong>Don&rsquo;t confuse visual size with semantic weight:</strong> An H5 can be styled at
+                        12px. An H2 can be styled at 80px. The heading level communicates hierarchy to machines &mdash;
+                        CSS communicates size to humans. Our build agents can apply any font size to any heading level.
+                        But they cannot guess the intended hierarchy from a visual design alone.
+                        <ul class="sublist">
+                            <li class="bad">&cross; Bad: A section subtitle styled at 30px labeled <code>H3</code>
+                                &mdash; but the only reason it&rsquo;s H3 is because that size looked right in Figma
+                            </li>
+                            <li class="good">&check; Good: That same subtitle correctly labeled <code>H3</code> because
+                                it is a third-level section title, with <code>font-size: 30px</code> applied as a visual
+                                override</li>
+                        </ul>
+                    </li>
+                    <li><strong>No heading gaps:</strong> Do not jump from H2 to H4. Search engines and accessibility
+                        tools interpret heading gaps as structural errors.
+                        <ul class="sublist">
+                            <li class="bad">&cross; Bad: <code>H1 &rarr; H3 &rarr; H5</code> (gaps in the chain)</li>
+                            <li class="good">&check; Good: <code>H1 &rarr; H2 &rarr; H3</code> (continuous, logical
+                                hierarchy)</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>Functional Layer Naming &mdash; What We Actually Read</h3>
+                <p>Our extraction agents identify element roles from their Figma layer names and Text Style assignments.
+                    A non-semantic layer name like <code>Text</code> or <code>Frame 23</code> forces the agent to make
+                    assumptions &mdash; which introduces errors.</p>
+                <ul>
+                    <li><strong>Text Styles must declare semantic level:</strong> Use names like
+                        <code>Heading/H1</code>, <code>Heading/H2</code>, <code>Body/Standard</code>,
+                        <code>UI/Label</code>, <code>UI/Caption</code>, <code>UI/Tagline</code>. Styles named by size
+                        (<code>Text/48px</code>, <code>Bold Large</code>) have zero semantic value.
+                        <ul class="sublist">
+                            <li class="bad">&cross; Bad: <code>Title Bold, Body Copy, Subtitle Medium</code></li>
+                            <li class="good">&check; Good:
+                                <code>Heading/H1, Body/Standard, Heading/H3, UI/Tagline</code></li>
+                        </ul>
+                    </li>
+                    <li><strong>Frame names must describe purpose:</strong> Name frames by their semantic role, not
+                        their position.
+                        <ul class="sublist">
+                            <li class="bad">&cross; Bad: <code>Frame 84, Group 12, Rectangle</code></li>
+                            <li class="good">&check; Good:
+                                <code>section-hero, card-pricing, nav-primary, footer-links</code></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>Beyond Headings &mdash; Lists, Tables, Forms &amp; Media</h3>
+                <p>HTML has native elements for virtually every kind of content. When designers use generic text blocks
+                    where a specific element is semantically correct, the code degrades in quality.</p>
+                <ul>
+                    <li><strong>Lists:</strong> If content is a collection of items (Features, Steps, Benefits), design
+                        them as a list component &mdash; not as stacked text blocks. Our agents will output
+                        <code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code> accordingly.</li>
+                    <li><strong>Data Tables:</strong> Comparative or tabular data (pricing tiers, specification sheets,
+                        ROM comparisons) must be structured as tables in Figma &mdash; with rows, columns, and clearly
+                        named headers. A text-mimicking-a-table is not a table.</li>
+                    <li><strong>Forms:</strong> Input fields must have associated visible or described label text. If a
+                        field has only a placeholder, flag it explicitly. Our build will generate a visually hidden
+                        label for accessibility compliance.</li>
+                    <li><strong>Blockquotes &amp; Testimonials:</strong> Quoted or attributed text must use a dedicated
+                        component or Text Style named <code>UI/Quote</code> or <code>UI/Testimonial</code> &mdash; not
+                        just italic body text.</li>
+                    <li><strong>Images &amp; Icons:</strong> Every image and meaningful icon must have a layer name that
+                        serves as its <code>alt</code> description. Purely decorative elements must be named with a
+                        <code>decorative-</code> prefix so agents suppress the alt attribute.
+                        <ul class="sublist">
+                            <li class="bad">&cross; Bad: <code>Image, Photo, SVG 1</code></li>
+                            <li class="good">&check; Good:
+                                <code>anthros-chair-side-view, icon-checkmark-cyan, decorative-background-blob</code>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>The Business Case &mdash; Why This Matters to Your Results</h3>
+                <ul>
+                    <li>&#x1F50D; <strong>SEO:</strong> Google&rsquo;s crawler reads heading hierarchy as a content
+                        outline. A broken H1 chain or missing heading structure directly impacts organic ranking
+                        potential.</li>
+                    <li>&#x267F; <strong>Accessibility:</strong> Screen readers navigate by heading levels, list
+                        structure, and form labels. Non-semantic design produces pages that are legally and ethically
+                        inaccessible to users with disabilities &mdash; a growing compliance risk in most markets.</li>
+                    <li>&#x26A1; <strong>Build velocity:</strong> Every semantic ambiguity in the Figma file generates a
+                        clarification round-trip between the agent and the designer. A semantically clean file
+                        eliminates this friction entirely and cuts production time significantly.</li>
+                    <li>&#x1F4D0; <strong>Maintainability:</strong> Code generated from a semantic design is structured
+                        and predictable. It&rsquo;s easier to extend, modify, and debug for years after delivery.</li>
+                </ul>
+
+                <div class="alert success">
+                    <p><strong>The Rule of Thumb:</strong> Before handoff, do a pass through your Figma file asking:
+                        <em>&ldquo;What HTML element would this be?&rdquo;</em> for every element. If you can&rsquo;t
+                        answer it clearly, the design is not semantically complete.</p>
+                </div>
             </section>
 
             <div class="summary-box">
