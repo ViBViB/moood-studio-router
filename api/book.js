@@ -29,30 +29,7 @@ module.exports = async (req, res) => {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    let calendar;
-    try {
-        const SCOPES = ['https://www.googleapis.com/auth/calendar'];
-        const email = (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '').trim().replace(/^["']|["']$/g, '');
-        const formattedKey = formatPrivateKey(process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY);
-
-        const auth = new google.auth.JWT(
-            email,
-            null,
-            formattedKey,
-            SCOPES
-        );
-        await auth.authorize();
-        calendar = google.calendar({ version: 'v3', auth });
-    } catch (authErr) {
-        console.error('Google Auth Error:', authErr);
-        return res.status(500).json({
-            error: 'Failed to authenticate with Google.',
-            details: authErr.message
-        });
-    }
-
-
-    // Check for required ENV variables
+    // 1. Check for required ENV variables FIRST
     const requiredEnv = [
         'RESEND_API_KEY',
         'GOOGLE_SERVICE_ACCOUNT_EMAIL',
@@ -62,7 +39,36 @@ module.exports = async (req, res) => {
     if (missing.length > 0) {
         return res.status(500).json({
             error: 'The machine is missing its core keys.',
-            details: `Missing environment variables in Vercel: ${missing.join(', ')}`
+            details: `Missing environment variables in Vercel: ${missing.join(', ')}. Please redeploy the project if you just added them.`
+        });
+    }
+
+    const SCOPES = ['https://www.googleapis.com/auth/calendar'];
+    const calendarId = process.env.GOOGLE_CALENDAR_ID || 'alberto.contreras@gmail.com';
+
+    let calendar;
+    try {
+        const serviceAccountEmail = (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '').trim().replace(/^["']|["']$/g, '');
+        const formattedKey = formatPrivateKey(process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY);
+
+        if (!formattedKey) {
+            throw new Error('Private key formatting failed or key is empty.');
+        }
+
+        const auth = new google.auth.JWT(
+            serviceAccountEmail,
+            null,
+            formattedKey,
+            SCOPES
+        );
+
+        await auth.authorize();
+        calendar = google.calendar({ version: 'v3', auth });
+    } catch (authErr) {
+        console.error('Google Auth Error:', authErr);
+        return res.status(500).json({
+            error: 'Failed to authenticate with Google.',
+            details: authErr.message
         });
     }
 
