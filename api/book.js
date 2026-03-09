@@ -6,6 +6,7 @@ const Busboy = require('busboy');
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
+const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 
 // Helper to format the private key correctly for Google Auth
 function formatPrivateKey(key) {
