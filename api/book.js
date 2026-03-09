@@ -5,35 +5,51 @@ const Busboy = require('busboy');
 // Initialize Resend with the API key from environment variables
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
-const SCOPES = ['https://www.googleapis.com/auth/calendar'];
-
 // Helper to format the private key correctly for Google Auth
 function formatPrivateKey(key) {
     if (!key) return null;
-    let formatted = key.replace(/\\n/g, '\n');
+
+    let cleaned = key.trim();
+
+    // Handle JSON-style quoted strings
+    if (cleaned.startsWith('"') && cleaned.endsWith('"')) {
+        try {
+            cleaned = JSON.parse(cleaned);
+        } catch (e) {
+            cleaned = cleaned.slice(1, -1);
+        }
+    }
+
+    // Replace literal \n with real newlines and trim again
+    let formatted = cleaned.replace(/\\n/g, '\n').trim();
+
+    // Inject headers if missing
     if (!formatted.includes('-----BEGIN PRIVATE KEY-----')) {
-        formatted = `-----BEGIN PRIVATE KEY-----\n${formatted}`;
+        formatted = `-----BEGIN PRIVATE KEY-----\n${formatted}\n-----END PRIVATE KEY-----`;
     }
-    if (!formatted.includes('-----END PRIVATE KEY-----')) {
-        formatted = `${formatted}\n-----END PRIVATE KEY-----`;
-    }
+
     return formatted;
 }
-
-const auth = new google.auth.JWT(
-    process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-    null,
-    formatPrivateKey(process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY),
-    SCOPES
-);
-const calendar = google.calendar({ version: 'v3', auth });
 
 module.exports = async (req, res) => {
     // Only allow POST requests
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
+
+    const SCOPES = ['https://www.googleapis.com/auth/calendar'];
+    const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
+
+    const formattedKey = formatPrivateKey(process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY);
+
+    const auth = new google.auth.JWT(
+        process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+        null,
+        formattedKey,
+        SCOPES
+    );
+    const calendar = google.calendar({ version: 'v3', auth });
+
 
     // Check for required ENV variables
     const requiredEnv = [
