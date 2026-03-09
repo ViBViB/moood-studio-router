@@ -5,12 +5,25 @@ const Busboy = require('busboy');
 // Initialize Resend with the API key from environment variables
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Google Calendar Setup
-const SCOPES = ['https://www.googleapis.com/auth/calendar'];
+const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
+
+// Helper to format the private key correctly for Google Auth
+function formatPrivateKey(key) {
+    if (!key) return null;
+    let formatted = key.replace(/\\n/g, '\n');
+    if (!formatted.includes('-----BEGIN PRIVATE KEY-----')) {
+        formatted = `-----BEGIN PRIVATE KEY-----\n${formatted}`;
+    }
+    if (!formatted.includes('-----END PRIVATE KEY-----')) {
+        formatted = `${formatted}\n-----END PRIVATE KEY-----`;
+    }
+    return formatted;
+}
+
 const auth = new google.auth.JWT(
     process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
     null,
-    process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    formatPrivateKey(process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY),
     SCOPES
 );
 const calendar = google.calendar({ version: 'v3', auth });
@@ -82,13 +95,14 @@ module.exports = async (req, res) => {
 
         // 1. Create Google Calendar Event
         const eventDate = new Date(slot.date);
-        const [time, modifier] = slot.time.split(' ');
-        let [hours, minutes] = time.split(':');
-        if (hours === '12') hours = '00';
-        if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
+        const [timePart, modifier] = slot.time.split(' ');
+        let [hours, minutes] = timePart.split(':');
+        hours = parseInt(hours, 10);
+        if (hours === 12) hours = 0;
+        if (modifier === 'PM') hours += 12;
 
         const startDateTime = new Date(eventDate);
-        startDateTime.setHours(hours, minutes, 0, 0);
+        startDateTime.setHours(hours, parseInt(minutes, 10), 0, 0);
 
         const endDateTime = new Date(startDateTime);
         endDateTime.setHours(startDateTime.getHours() + 1); // 1-hour session
@@ -105,11 +119,15 @@ PRD Attached: ${files.length > 0 ? files[0].name : 'No'}`,
             attendees: [{ email }],
         };
 
-        const calendarId = process.env.GOOGLE_CALENDAR_ID || 'primary';
-        await calendar.events.insert({
-            calendarId: calendarId,
-            resource: event,
-        });
+        try {
+            await calendar.events.insert({
+                calendarId: calendarId,
+                resource: event,
+            });
+        } catch (calErr) {
+            console.error('Google Calendar API Error:', calErr);
+            throw new Error(`Google Calendar rejection: ${calErr.message}`);
+        }
 
         // 2. Send Email Notification
         const emailContent = `
