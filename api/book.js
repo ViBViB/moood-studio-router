@@ -49,18 +49,20 @@ module.exports = async (req, res) => {
     let calendar;
     try {
         const serviceAccountEmail = (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL || '').trim().replace(/^["']|["']$/g, '');
-        const formattedKey = formatPrivateKey(process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY);
+        let rawKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY || '';
 
-        if (!formattedKey) {
-            throw new Error('Private key formatting failed or key is empty.');
+        // Final safety check: if Vercel passed the string "undefined" or "null"
+        if (rawKey === 'undefined' || rawKey === 'null' || rawKey.length < 10) {
+            throw new Error('The private key in Vercel appears to be empty or malformed (detected as null/undefined string).');
         }
 
-        const auth = new google.auth.JWT(
-            serviceAccountEmail,
-            null,
-            formattedKey,
-            SCOPES
-        );
+        const formattedKey = formatPrivateKey(rawKey);
+
+        const auth = new google.auth.JWT({
+            email: serviceAccountEmail,
+            key: formattedKey,
+            scopes: SCOPES
+        });
 
         await auth.authorize();
         calendar = google.calendar({ version: 'v3', auth });
