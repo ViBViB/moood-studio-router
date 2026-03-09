@@ -127,19 +127,23 @@ function duplicateImages() {
 duplicateImages();
 
 // Identity Portal Logic
-const portal = document.getElementById('identityPortal');
 let currentWeekOffset = 0;
 let selectedSlot = null;
-
 function openPortal() {
-    portal.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Prevent scroll
-    renderCalendar();
+    const portal = document.getElementById('identityPortal');
+    if (portal) {
+        portal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent scroll
+        renderCalendar();
+    }
 }
 
 function closePortal() {
-    portal.classList.remove('active');
-    document.body.style.overflow = ''; // Restore scroll
+    const portal = document.getElementById('identityPortal');
+    if (portal) {
+        portal.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scroll
+    }
 }
 
 // Neural Scheduler Logic

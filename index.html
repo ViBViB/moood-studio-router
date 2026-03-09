@@ -208,81 +208,81 @@
                     Moood Studio does not claim ownership of all external visual assets; all rights belong to their
                     original creators.
                 </p>
-                <script src="script.js"></script>
-                <script src="how-it-works.js"></script>
-                <!-- Identity Portal Lightbox -->
-                <div id="identityPortal" class="portal-overlay">
-                    <div class="portal-header">
-                        <button class="portal-close" onclick="closePortal()">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
-                        </button>
-                        <div class="portal-logo">
-                            <img src="assets/images/moood-logo.svg" alt="Moood Studio Agency" class="white-logo"
-                                style="height: 48px;">
+            </div>
+        </section>
+    </div>
+
+    <!-- Identity Portal Lightbox -->
+    <div id="identityPortal" class="portal-overlay">
+        <div class="portal-header">
+            <button class="portal-close" onclick="closePortal()">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </button>
+            <div class="portal-logo">
+                <img src="assets/images/moood-logo.svg" alt="Moood Studio Agency" class="white-logo"
+                    style="height: 48px;">
+            </div>
+        </div>
+
+        <div class="portal-container">
+            <!-- Left: Onboarding Form -->
+            <div class="portal-form-section">
+                <h2 class="portal-title">The Onboarding</h2>
+                <form id="onboardingForm" class="portal-form">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="john@company.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="companyName">Company Name</label>
+                        <input type="text" id="companyName" name="companyName" placeholder="Visionary Inc." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="prdUpload">Upload PRD (Optional)</label>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="prdUpload" name="prdUpload" accept=".pdf,.doc,.docx">
+                            <span class="file-upload-label">Drag & drop strategy files or click to
+                                browse</span>
                         </div>
                     </div>
+                </form>
+            </div>
 
-                    <div class="portal-container">
-                        <!-- Left: Onboarding Form -->
-                        <div class="portal-form-section">
-                            <h2 class="portal-title">The Onboarding</h2>
-                            <form id="onboardingForm" class="portal-form">
-                                <div class="form-group">
-                                    <label for="fullName">Full Name</label>
-                                    <input type="text" id="fullName" name="fullName" placeholder="John Doe" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" id="email" name="email" placeholder="john@company.com" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="companyName">Company Name</label>
-                                    <input type="text" id="companyName" name="companyName" placeholder="Visionary Inc."
-                                        required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="prdUpload">Upload PRD (Optional)</label>
-                                    <div class="file-upload-wrapper">
-                                        <input type="file" id="prdUpload" name="prdUpload" accept=".pdf,.doc,.docx">
-                                        <span class="file-upload-label">Drag & drop strategy files or click to
-                                            browse</span>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-
-                        <!-- Right: Neural Scheduler -->
-                        <div class="portal-scheduler-section">
-                            <h2 class="portal-title">The Session</h2>
-                            <div class="scheduler-controls">
-                                <button class="week-nav" id="prevWeek">&larr;</button>
-                                <span id="weekDisplay" class="week-range">Current Week</span>
-                                <button class="week-nav" id="nextWeek">&rarr;</button>
-                            </div>
-
-                            <div id="calendarGrid" class="calendar-grid">
-                                <!-- Calendar days and slots will be injected here via JS -->
-                            </div>
-
-                            <div class="portal-submit-wrapper">
-                                <button type="submit" form="onboardingForm" class="portal-submit-btn">
-                                    INITIATE THE SECESSION
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M6 12H18M18 12L13 7M18 12L13 17" stroke="white" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Right: Neural Scheduler -->
+            <div class="portal-scheduler-section">
+                <h2 class="portal-title">The Session</h2>
+                <div class="scheduler-controls">
+                    <button class="week-nav" id="prevWeek">&larr;</button>
+                    <span id="weekDisplay" class="week-range">Current Week</span>
+                    <button class="week-nav" id="nextWeek">&rarr;</button>
                 </div>
 
-                <!-- Scripts -->
+                <div id="calendarGrid" class="calendar-grid">
+                    <!-- Calendar days and slots will be injected here via JS -->
+                </div>
+
+                <div class="portal-submit-wrapper">
+                    <button type="submit" form="onboardingForm" class="portal-submit-btn">
+                        INITIATE THE SECESSION
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 12H18M18 12L13 7M18 12L13 17" stroke="white" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="how-it-works.js"></script>
 </body>
 
 </html>

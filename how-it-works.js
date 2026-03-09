@@ -11,8 +11,14 @@
     let currentIndex = 0;
 
     // Show carousel immediately
-    carouselViewport.classList.add('active');
-    carouselNavigation.classList.add('active');
+    if (carouselViewport) {
+        carouselViewport.classList.add('active');
+    }
+    if (carouselNavigation) {
+        carouselNavigation.classList.add('active');
+    }
+
+    if (!carouselViewport || !carouselTrack || !carouselItemWrappers.length) return;
 
     // Carousel navigation
     function goToSlide(index) {
