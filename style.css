@@ -251,23 +251,20 @@ body {
 
 /* ===== PROBLEM STATEMENT SECTION ===== */
 .problem-statement {
-    padding: 60px 80px 90px;
-    padding-top: 240px;
-    /* Increased from 120px to give more space from Scroll Down */
-    /* Extra top padding for logo clearance */
+    padding: 240px 80px 120px;
     background: #fff;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     position: relative;
     z-index: 50;
-    /* Above hero and masonry, below logo */
     min-height: 100vh;
 }
 
-.problem-content {
+.problem-statement p {
     max-width: 1400px;
     width: 100%;
+    margin-bottom: 120px;
     text-align: left;
 }
 
@@ -275,34 +272,24 @@ body {
     font-size: 64px;
     line-height: 1.3;
     color: #666;
-    margin: 0 0 40px 0;
-    /* Reduced from 80px */
     font-weight: 400;
     letter-spacing: -0.02em;
 }
 
-.solution-text {
+.emphasis-black {
     font-size: 72px;
     line-height: 1.25;
     color: #000;
-    margin: 0;
     font-weight: 400;
     letter-spacing: -0.03em;
 }
 
-.emphasis-black {
-    color: #000;
-    margin-top: 40px;
-    /* Controlled vertical break */
-    margin-bottom: 0px;
-    /* Removed extra spacing */
-}
-
 .emphasis-gray {
+    font-size: 72px;
+    line-height: 1.25;
     color: #666;
-    margin-top: 40px;
-    /* Consistent vertical break */
-    margin-bottom: 0;
+    font-weight: 400;
+    letter-spacing: -0.03em;
 }
 
 /* ===== HOW IT WORKS SECTION ===== */
@@ -757,40 +744,41 @@ body {
 
     .problem-statement {
         padding: 80px 24px 60px;
-        /* Increased from 20px to give more space from Scroll Down on mobile */
         min-height: auto;
-        text-align: left;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .problem-statement p {
+        margin-bottom: 60px;
+        /* Reduced from 120px for mobile */
+        max-width: 100%;
     }
 
     .problem-text {
         font-size: 22px;
-        line-height: 1.4;
-        margin-bottom: 32px;
-        color: rgba(0, 0, 0, 0.6);
-        max-width: 100%;
-    }
-
-    .solution-text {
-        font-size: 24px;
         line-height: 1.3;
-        text-align: left;
-        font-weight: 500;
+        color: rgba(0, 0, 0, 0.6);
     }
 
     .emphasis-black {
-        display: block;
-        margin-top: 24px;
-        /* Reduced for mobile */
+        font-size: 24px;
+        line-height: 1.25;
         color: #000;
         font-weight: 500;
+        margin-bottom: 60px;
     }
 
     .emphasis-gray {
-        display: block;
-        margin-top: 24px;
-        /* Reduced for mobile */
+        font-size: 24px;
+        line-height: 1.25;
         color: rgba(0, 0, 0, 0.4);
+        font-weight: 500;
+        margin-bottom: 60px;
     }
+
+
 
     .how-it-works {
         padding: 40px 0;
