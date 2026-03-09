@@ -183,20 +183,25 @@ PRD Attached: ${files.length > 0 ? files[0].name : 'No'}`,
         `;
 
         try {
-            const agencyRes = await resend.emails.send({
+            const { data, error: sendError } = await resend.emails.send({
                 from: 'Moood Studio <notifications@moood.studio>',
                 to: ['alberto.contreras@gmail.com'],
                 subject: `New Onboarding Service: ${companyName}`,
                 html: agencyEmailContent,
                 attachments: files.map(file => ({
                     filename: file.name,
-                    content: file.content // Resend accepts Buffer
+                    content: file.content
                 }))
             });
-            console.log('Agency Email Result:', agencyRes);
-        } catch (emailErr) {
-            console.error('Agency Email Error:', emailErr);
-            // We don't throw here to ensure the customer email still tries to send
+
+            if (sendError) {
+                console.error('Resend Agency Error:', sendError);
+                // We don't block the customer email, but we log the problem
+            } else {
+                console.log('Agency Email Sent:', data.id);
+            }
+        } catch (err) {
+            console.error('Agency Email Catch:', err);
         }
 
         // 4. Send Email Confirmation to CUSTOMER
@@ -217,17 +222,22 @@ PRD Attached: ${files.length > 0 ? files[0].name : 'No'}`,
         `;
 
         try {
-            const customerRes = await resend.emails.send({
+            const { data, error: sendError } = await resend.emails.send({
                 from: 'Moood Studio <notifications@moood.studio>',
                 to: [customerEmail],
                 subject: `Your Booking is Confirmed: ${formattedDate}`,
                 html: customerEmailContent
             });
-            console.log('Customer Email Result:', customerRes);
-        } catch (emailErr) {
-            console.error('Customer Email Error:', emailErr);
-            // This is critical if we want to know why it failed
-            throw new Error(`Email rejection: ${emailErr.message}. Note: Verify your domain in Resend dashboard.`);
+
+            if (sendError) {
+                console.error('Resend Customer Error:', sendError);
+                throw new Error(`Email rejection: ${sendError.message}. (Common cause: ${sendError.name})`);
+            } else {
+                console.log('Customer Email Sent:', data.id);
+            }
+        } catch (err) {
+            console.error('Customer Email Catch:', err);
+            throw new Error(`The machine failed to send the confirmation: ${err.message}. Check if moood.studio is verified in Resend.`);
         }
 
         return res.status(200).json({
