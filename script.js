@@ -300,7 +300,8 @@ document.getElementById('onboardingForm').addEventListener('submit', async (e) =
         }
     } catch (error) {
         console.error("Booking failed:", error);
-        alert("The machine encountered an error: " + error.message + "\n\nPlease ensure your environment variables are configured in Vercel.");
+        const detailMsg = result && result.details ? `\n\nDetails: ${result.details}` : "";
+        alert("The machine encountered an error: " + error.message + detailMsg + "\n\nPlease ensure your environment variables are configured in Vercel.");
         submitBtn.innerHTML = originalBtnText;
         submitBtn.disabled = false;
     }
