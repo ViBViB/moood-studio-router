@@ -256,7 +256,7 @@ document.getElementById('onboardingForm').addEventListener('submit', async (e) =
         return;
     }
 
-    const submitBtn = e.target.querySelector('.portal-submit-btn');
+    const submitBtn = document.querySelector('.portal-submit-btn');
     const originalBtnText = submitBtn.innerHTML;
     submitBtn.disabled = true;
     submitBtn.innerHTML = 'MANUFACTURING THE SESSION...';
