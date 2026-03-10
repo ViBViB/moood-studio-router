@@ -304,12 +304,16 @@ function isSlotDisabled(date, timeStr) {
 document.getElementById('prevWeek').addEventListener('click', () => {
     if (currentWeekOffset > 0) {
         currentWeekOffset--;
+        activeDate = null;
+        selectedSlot = null;
         renderCalendar();
     }
 });
 
 document.getElementById('nextWeek').addEventListener('click', () => {
     currentWeekOffset++;
+    activeDate = null;
+    selectedSlot = null;
     renderCalendar();
 });
 
