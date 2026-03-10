@@ -1263,6 +1263,15 @@ body {
     text-decoration: line-through;
 }
 
+.timezone-indicator {
+    margin-top: 16px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: center;
+}
+
 .portal-submit-wrapper {
     margin-top: 40px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);

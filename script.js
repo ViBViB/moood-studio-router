@@ -214,11 +214,16 @@ function renderCalendar() {
 
     // 2. Create Time Slots Grid
     if (activeDate) {
+        const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Local Default Time';
+
         const slotsContainer = document.createElement('div');
         slotsContainer.className = 'time-slots-container';
         slotsContainer.innerHTML = `
             <div class="time-slots-grid">
                 ${generateTimeSlotHTML(activeDate)}
+            </div>
+            <div class="timezone-indicator">
+                Times are displayed in your local timezone (${userTimeZone})
             </div>
         `;
         calendarGrid.appendChild(slotsContainer);
