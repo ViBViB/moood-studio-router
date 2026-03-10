@@ -244,7 +244,7 @@ document.getElementById('onboardingForm').addEventListener('submit', async (e) =
     const submitBtn = document.querySelector('.portal-submit-btn');
     const originalBtnText = submitBtn.innerHTML;
     submitBtn.disabled = true;
-    submitBtn.innerHTML = 'MANUFACTURING THE SESSION...';
+    submitBtn.innerHTML = 'SYNCHRONIZING IDENTITY...';
 
     let result;
     try {
@@ -264,7 +264,7 @@ document.getElementById('onboardingForm').addEventListener('submit', async (e) =
         }
 
         if (response.ok) {
-            submitBtn.innerHTML = 'TAKEOVER SUCCESSFUL';
+            submitBtn.innerHTML = 'TAKEOVER CONFIRMED';
             submitBtn.style.background = '#4CAF50';
 
             setTimeout(() => {
