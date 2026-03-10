@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figma Handoff Guide | Moood Studio Agency</title>
+    <link rel="stylesheet" href="./style.css?v=2.0">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="assets/images/moood-logo.svg" alt="Moood Studio Agency">
+            </div>
+
+            <nav class="toc">
+                <h3 class="toc-title">Table of Contents</h3>
+                <ul>
+                    <li><a href="#intro">Pipeline Overview</a></li>
+                    <li><a href="#variables">1. Variables and Modes</a></li>
+                    <li><a href="#typography">2. Typography System</a></li>
+                    <li><a href="#auto-layout">3. Auto Layout</a></li>
+                    <li><a href="#spacing">4. Spacing and Structure</a></li>
+                    <li><a href="#assets">5. Asset Export Config</a></li>
+                    <li><a href="#components">6. Component Architecture</a></li>
+                    <li><a href="#semantic">7. Semantic Design &#x26A1;</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <header id="intro" class="hero">
+                <h1>Figma Technical Handoff Guide & Best Practices</h1>
+                <h2>Moood Studio Agency - Automated Design-to-Code Pipeline</h2>
+                <p class="lead">This document outlines the strict technical requirements for Figma files handed off to
+                    Moood Studio Agency. Our agency utilizes an advanced AI-powered pipeline (Model Context Protocol)
+                    that automatically reads, interprets, and translates your Figma file into code tokens and structure.
+                </p>
+                <div class="alert success">
+                    <p>To ensure a <strong>zero-friction handoff</strong> and a pixel-perfect build without manual
+                        back-and-forth, your Figma file must adhere to the following best practices.</p>
+                </div>
+            </header>
+
+            <section id="variables">
+                <h2>1. Variables and Modes (The Foundation)</h2>
+                <p>Our system natively understands <strong>Figma Variables</strong>. Detached hex codes or hardcoded
+                    sizes slow down the process and introduce errors.</p>
+                <ul>
+                    <li><strong>Use Variables for Everything:</strong> Colors, Spacing, Border Radii, and Sizing must be
+                        defined as variables, not just local styles.</li>
+                    <li><strong>Semantic Naming:</strong> Name variables by their function, not their appearance.
+                        <ul class="sublist">
+                            <li class="bad">❌ Bad: <code>Color/Blue</code> or <code>Text/48px</code></li>
+                            <li class="good">✅ Good: <code>Brand/Primary</code>, <code>Spacing/Section-Gap</code>,
+                                <code>Radius/Card</code>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><strong>Modes for Responsive Design:</strong> If design values change between Desktop and Mobile
+                        (e.g., paddings or typography scales), map them using <strong>Variable Modes</strong> (e.g.,
+                        Mode 1: Desktop, Mode 2: Mobile). Our build agents will automatically read these modes to
+                        generate fluid CSS functions (<code>clamp()</code>) and media queries.</li>
+                    <li><strong>Modes for Theming:</strong> Use Variable Modes for Light and Dark themes instead of
+                        duplicating screens.</li>
+                </ul>
+            </section>
+
+            <section id="typography">
+                <h2>2. Typography System</h2>
+                <p>We use Fluid Typography. This means text gracefully scales between mobile and desktop sizes
+                    mathematically.</p>
+                <ul>
+                    <li><strong>Strict Text Styles:</strong> Every text node must have an assigned Text Style. No
+                        detached typography.</li>
+                    <li><strong>Clear Hierarchy:</strong> Group text styles semantically. (e.g.,
+                        <code>Heading/Display</code>, <code>Heading/H1</code>, <code>Body/Standard</code>,
+                        <code>Body/Small</code>, <code>UI/Label</code>).
+                    </li>
+                    <li><strong>Mode-Linked Typography:</strong> Link numeric variables to your Text Styles. If
+                        <code>Heading/H1</code> is <code>120px</code> in the "Desktop" mode and <code>48px</code> in the
+                        "Mobile" mode, our system will automatically parse this and generate the perfect CSS
+                        <code>clamp()</code> rule.
+                    </li>
+                </ul>
+            </section>
+
+            <section id="auto-layout">
+                <h2>3. Auto Layout is Mandatory</h2>
+                <p>Our extraction agents read the DOM (Document Object Model) structure directly from your Figma frames.
+                    If a layout relies on absolute positioning by dragging and dropping, it cannot be accurately
+                    translated to HTML/CSS flexbox or grid.</p>
+                <ul>
+                    <li><strong>100% Auto Layout:</strong> Every section, container, card, and grouping must use Auto
+                        Layout.</li>
+                    <li><strong>Resizing Rules:</strong> Accurately set elements to <strong>Hug contents</strong>,
+                        <strong>Fill container</strong>, or <strong>Fixed width/height</strong>. Our engine translates
+                        "Fill container" directly to <code>width: 100%;</code> or <code>flex: 1;</code>.
+                    </li>
+                    <li><strong>No "Hacks":</strong> Avoid using invisible spacer boxes. Use the native
+                        <code>Gap</code>, <code>Padding</code>, and <code>Margin</code> properties within Auto Layout.
+                    </li>
+                </ul>
+            </section>
+
+            <section id="spacing">
+                <h2>4. Spacing and Structure</h2>
+                <ul>
+                    <li><strong>Use Spacing Variables:</strong> Define a spacing scale (e.g., 4px, 8px, 16px, 24px,
+                        32px, 64px) using number variables. Apply these variables to your Auto Layout gaps and paddings.
+                    </li>
+                    <li><strong>Logical Grouping:</strong> Frame your elements logically. A typical web section should
+                        be structured as:
+                        <br><br><code>Section > Container (Max-Width) > Content Layout > Elements</code>
+                    </li>
+                </ul>
+            </section>
+
+            <section id="assets">
+                <h2>5. Asset Export Configuration</h2>
+                <p>Our agents will automatically download assets directly from the remote Figma file.</p>
+                <ul>
+                    <li><strong>Mark for Export:</strong> Any vector illustration, icon, or photographic asset that
+                        needs to exist on the website MUST have an <strong>Export setting</strong> applied (+ Export in
+                        the right panel).</li>
+                    <li><strong>Formats:</strong>
+                        <ul class="sublist">
+                            <li>Icons and Logos: Set to <strong>SVG</strong>.</li>
+                            <li>Photos/Complex Graphics: Set to <strong>PNG</strong>, <strong>JPG</strong>, or
+                                <strong>WebP</strong> (at @2x minimum).
+                            </li>
+                        </ul>
+                    </li>
+                    <li><strong>Clean Naming Convention:</strong> The name of the layer will be the exact name of the
+                        downloaded file. Use lowercase, hyphenated names.
+                        <ul class="sublist">
+                            <li class="bad">❌ Bad: <code>Rectangle 4323</code> or <code>Vector</code></li>
+                            <li class="good">✅ Good: <code>hero-background-image</code>, <code>icon-arrow-right</code>,
+                                <code>logo-footer</code>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><strong>Flatten Icons:</strong> Outline strokes (<code>Shift + Cmd + O</code>) and flatten
+                        (<code>Cmd + E</code>) complex icons into a single shape layer where possible to ensure clean
+                        SVG code.</li>
+                </ul>
+            </section>
+
+            <section id="components">
+                <h2>6. Component Architecture</h2>
+                <ul>
+                    <li><strong>Use Components:</strong> Any element that repeats (Buttons, Cards, Navbars, Inputs) must
+                        be a Main Component.</li>
+                    <li><strong>Component Properties:</strong> Use Variants, Boolean, and Text properties cleanly. Our
+                        system maps Figma variants directly to CSS modifier classes.
+                        <p class="example">e.g., A button component with properties
+                            <code>Variant: Primary / Secondary</code> and <code>State: Default / Hover</code>.
+                        </p>
+                    </li>
+                </ul>
+            </section>
+
+            <section id="semantic">
+                <h2>7. Semantic Design &mdash; The Layer Designers Often Skip</h2>
+                <p>This is the chapter most Figma files fail at &mdash; and the one with the highest impact on the final
+                    product.</p>
+                <div class="alert warning">
+                    <p>Our pipeline reads your Figma file as a <strong>source of truth</strong>. If a text element is
+                        labeled <code>H3</code> in Figma but visually looks like a page title, our agents will code it
+                        as an <code>H3</code> &mdash; not an <code>H1</code>. The visual appearance and the semantic
+                        role <em>must</em> match. When they don&rsquo;t, the resulting code can silently break SEO,
+                        accessibility, and screen reader compatibility.</p>
+                </div>
+
+                <h3>What is Semantic Design?</h3>
+                <p>Semantic Design means every element in Figma is named and structured according to its
+                    <strong>function and role in the content hierarchy</strong> &mdash; not just its visual appearance.
+                    A &ldquo;big bold headline&rdquo; and an &ldquo;H1&rdquo; are not the same thing. One describes how
+                    it looks. The other describes what it <em>is</em> and where it belongs in the structure of a
+                    document.</p>
+                <p>Search engines, screen readers, and our AI coding agents all rely on this layer of meaning to
+                    correctly interpret your design. When it&rsquo;s missing or inconsistent, the final code produces
+                    pages that can rank poorly, fail accessibility audits, and require expensive post-production
+                    corrections.</p>
+
+                <h3>The Heading Chain &mdash; The Most Common Failure Point</h3>
+                <p>HTML defines six levels of headings: <code>H1</code> through <code>H6</code>. Each page should have
+                    <strong>exactly one H1</strong> (the main topic of the page), followed by a logical hierarchy of H2s
+                    (sections), H3s (sub-sections), and so on. Skipping levels or using heading levels purely for size
+                    creates an incoherent document structure.</p>
+                <ul>
+                    <li><strong>One H1 per page:</strong> It represents the primary topic. There must be only one.
+                        Design accordingly &mdash; even if multiple large text elements exist on the page, only one can
+                        hold the H1 semantic role.
+                        <ul class="sublist">
+                            <li class="bad">&cross; Bad: Hero headline labeled <code>Heading/Display</code> + section
+                                title also labeled <code>Heading/Display</code></li>
+                            <li class="good">&check; Good: Hero headline labeled <code>Heading/H1</code> &middot;
+                                Section title labeled <code>Heading/H2</code></li>
+                        </ul>
+                    </li>
+                    <li><strong>Don&rsquo;t confuse visual size with semantic weight:</strong> An H5 can be styled at
+                        12px. An H2 can be styled at 80px. The heading level communicates hierarchy to machines &mdash;
+                        CSS communicates size to humans. Our build agents can apply any font size to any heading level.
+                        But they cannot guess the intended hierarchy from a visual design alone.
+                        <ul class="sublist">
+                            <li class="bad">&cross; Bad: A section subtitle styled at 30px labeled <code>H3</code>
+                                &mdash; but the only reason it&rsquo;s H3 is because that size looked right in Figma
+                            </li>
+                            <li class="good">&check; Good: That same subtitle correctly labeled <code>H3</code> because
+                                it is a third-level section title, with <code>font-size: 30px</code> applied as a visual
+                                override</li>
+                        </ul>
+                    </li>
+                    <li><strong>No heading gaps:</strong> Do not jump from H2 to H4. Search engines and accessibility
+                        tools interpret heading gaps as structural errors.
+                        <ul class="sublist">
+                            <li class="bad">&cross; Bad: <code>H1 &rarr; H3 &rarr; H5</code> (gaps in the chain)</li>
+                            <li class="good">&check; Good: <code>H1 &rarr; H2 &rarr; H3</code> (continuous, logical
+                                hierarchy)</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>Functional Layer Naming &mdash; What We Actually Read</h3>
+                <p>Our extraction agents identify element roles from their Figma layer names and Text Style assignments.
+                    A non-semantic layer name like <code>Text</code> or <code>Frame 23</code> forces the agent to make
+                    assumptions &mdash; which introduces errors.</p>
+                <ul>
+                    <li><strong>Text Styles must declare semantic level:</strong> Use names like
+                        <code>Heading/H1</code>, <code>Heading/H2</code>, <code>Body/Standard</code>,
+                        <code>UI/Label</code>, <code>UI/Caption</code>, <code>UI/Tagline</code>. Styles named by size
+                        (<code>Text/48px</code>, <code>Bold Large</code>) have zero semantic value.
+                        <ul class="sublist">
+                            <li class="bad">&cross; Bad: <code>Title Bold, Body Copy, Subtitle Medium</code></li>
+                            <li class="good">&check; Good:
+                                <code>Heading/H1, Body/Standard, Heading/H3, UI/Tagline</code></li>
+                        </ul>
+                    </li>
+                    <li><strong>Frame names must describe purpose:</strong> Name frames by their semantic role, not
+                        their position.
+                        <ul class="sublist">
+                            <li class="bad">&cross; Bad: <code>Frame 84, Group 12, Rectangle</code></li>
+                            <li class="good">&check; Good:
+                                <code>section-hero, card-pricing, nav-primary, footer-links</code></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>Beyond Headings &mdash; Lists, Tables, Forms &amp; Media</h3>
+                <p>HTML has native elements for virtually every kind of content. When designers use generic text blocks
+                    where a specific element is semantically correct, the code degrades in quality.</p>
+                <ul>
+                    <li><strong>Lists:</strong> If content is a collection of items (Features, Steps, Benefits), design
+                        them as a list component &mdash; not as stacked text blocks. Our agents will output
+                        <code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code> accordingly.</li>
+                    <li><strong>Data Tables:</strong> Comparative or tabular data (pricing tiers, specification sheets,
+                        ROM comparisons) must be structured as tables in Figma &mdash; with rows, columns, and clearly
+                        named headers. A text-mimicking-a-table is not a table.</li>
+                    <li><strong>Forms:</strong> Input fields must have associated visible or described label text. If a
+                        field has only a placeholder, flag it explicitly. Our build will generate a visually hidden
+                        label for accessibility compliance.</li>
+                    <li><strong>Blockquotes &amp; Testimonials:</strong> Quoted or attributed text must use a dedicated
+                        component or Text Style named <code>UI/Quote</code> or <code>UI/Testimonial</code> &mdash; not
+                        just italic body text.</li>
+                    <li><strong>Images &amp; Icons:</strong> Every image and meaningful icon must have a layer name that
+                        serves as its <code>alt</code> description. Purely decorative elements must be named with a
+                        <code>decorative-</code> prefix so agents suppress the alt attribute.
+                        <ul class="sublist">
+                            <li class="bad">&cross; Bad: <code>Image, Photo, SVG 1</code></li>
+                            <li class="good">&check; Good:
+                                <code>anthros-chair-side-view, icon-checkmark-cyan, decorative-background-blob</code>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>The Business Case &mdash; Why This Matters to Your Results</h3>
+                <ul>
+                    <li>&#x1F50D; <strong>SEO:</strong> Google&rsquo;s crawler reads heading hierarchy as a content
+                        outline. A broken H1 chain or missing heading structure directly impacts organic ranking
+                        potential.</li>
+                    <li>&#x267F; <strong>Accessibility:</strong> Screen readers navigate by heading levels, list
+                        structure, and form labels. Non-semantic design produces pages that are legally and ethically
+                        inaccessible to users with disabilities &mdash; a growing compliance risk in most markets.</li>
+                    <li>&#x26A1; <strong>Build velocity:</strong> Every semantic ambiguity in the Figma file generates a
+                        clarification round-trip between the agent and the designer. A semantically clean file
+                        eliminates this friction entirely and cuts production time significantly.</li>
+                    <li>&#x1F4D0; <strong>Maintainability:</strong> Code generated from a semantic design is structured
+                        and predictable. It&rsquo;s easier to extend, modify, and debug for years after delivery.</li>
+                </ul>
+
+                <div class="alert success">
+                    <p><strong>The Rule of Thumb:</strong> Before handoff, do a pass through your Figma file asking:
+                        <em>&ldquo;What HTML element would this be?&rdquo;</em> for every element. If you can&rsquo;t
+                        answer it clearly, the design is not semantically complete.</p>
+                </div>
+            </section>
+
+            <div class="summary-box">
+                <h3>Summary: What happens when you follow this guide?</h3>
+                <p>When you hand off a file meeting these criteria, our <strong>Brand Compliance Officer (AI
+                        Agent)</strong> will:</p>
+                <ol>
+                    <li>Scan your file instantly via API.</li>
+                    <li>Read your Variable Modes and Text Styles.</li>
+                    <li>Automatically write the master <code>brand-tokens.css</code> file tailored perfectly to your
+                        constraints, complete with fluid typography <code>clamp()</code> formulas.</li>
+                    <li>Extract and properly name every icon and image perfectly cropped.</li>
+                    <li>Translate your Auto Layout structures into flawless semantic HTML/CSS without human error.</li>
+                </ol>
+                <p class="final-word">Quality in Figma equals Quality in Code.</p>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
