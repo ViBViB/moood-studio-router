@@ -4,6 +4,11 @@
             "source": "/club-pilates-remix",
             "destination": "/club-pilates-remix/",
             "permanent": false
+        },
+        {
+            "source": "/documentation",
+            "destination": "/documentation/",
+            "permanent": false
         }
     ],
     "rewrites": [
@@ -14,6 +19,14 @@
         {
             "source": "/club-pilates-remix/:path*",
             "destination": "https://club-pilates-remix.vercel.app/:path*"
+        },
+        {
+            "source": "/documentation/",
+            "destination": "https://vibvib.github.io/Figma-Handoff-Guide/"
+        },
+        {
+            "source": "/documentation/:path*",
+            "destination": "https://vibvib.github.io/Figma-Handoff-Guide/:path*"
         }
     ]
 }
