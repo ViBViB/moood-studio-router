@@ -132,82 +132,163 @@ let selectedSlot = null;
 // Initialized via ctaButtons below
 
 // Neural Scheduler Logic
+let activeDate = null; // Currently selected date object
+
 function renderCalendar() {
     const calendarGrid = document.getElementById('calendarGrid');
     const weekDisplay = document.getElementById('weekDisplay');
     calendarGrid.innerHTML = '';
 
     const today = new Date();
-    const startOfWeek = new Date(today);
-    // Start from current day or Monday of current week
-    const dayDiff = today.getDay() === 0 ? -6 : 1 - today.getDay();
-    startOfWeek.setDate(today.getDate() + dayDiff + (currentWeekOffset * 7));
+    today.setHours(0, 0, 0, 0);
+
+    // Calculate Monday of the target week
+    const startOfWeek = new Date();
+    const dayOfWeek = startOfWeek.getDay();
+    const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    startOfWeek.setDate(startOfWeek.getDate() + diffToMonday + (currentWeekOffset * 7));
+    startOfWeek.setHours(0, 0, 0, 0);
 
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 4); // Friday
 
     weekDisplay.textContent = `${startOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${endOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
 
-    // Generate Mon-Fri
+    // 1. Create Days Row
+    const daysRow = document.createElement('div');
+    daysRow.className = 'days-row';
+
+    let firstAvailableDate = null;
+
     for (let i = 0; i < 5; i++) {
-        const currentDay = new Date(startOfWeek);
-        currentDay.setDate(startOfWeek.getDate() + i);
+        const date = new Date(startOfWeek);
+        date.setDate(startOfWeek.getDate() + i);
 
-        const dayColumn = document.createElement('div');
-        dayColumn.className = 'calendar-day-column';
+        const dayCard = document.createElement('div');
+        dayCard.className = 'day-card';
 
-        const dayName = currentDay.toLocaleDateString('en-US', { weekday: 'long' });
-        const dayDate = currentDay.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
+        const dayNum = date.getDate();
+        const fullDateStr = date.toDateString();
 
-        dayColumn.innerHTML = `
-            <div class="day-header">${dayName}, ${dayDate}</div>
-            <div class="time-slots">
-                ${generateTimeSlots(currentDay)}
-            </div>
+        // Check if day should be disabled (past or after 4pm today)
+        const isDisabled = isDayDisabled(date);
+        if (isDisabled) {
+            dayCard.classList.add('disabled');
+        } else if (!firstAvailableDate) {
+            firstAvailableDate = date;
+        }
+
+        // Set active date if matches (or default to first available)
+        if (activeDate && activeDate.toDateString() === fullDateStr) {
+            dayCard.classList.add('active');
+        }
+
+        dayCard.innerHTML = `
+            <span class="day-name">${dayName}</span>
+            <span class="day-number">${dayNum}</span>
         `;
-        calendarGrid.appendChild(dayColumn);
+
+        if (!isDisabled) {
+            dayCard.onclick = () => {
+                activeDate = new Date(date);
+                renderCalendar(); // Re-render to update active state and slots
+            };
+        }
+
+        daysRow.appendChild(dayCard);
     }
 
-    // Attach slot listeners
-    document.querySelectorAll('.time-slot').forEach(slot => {
-        slot.addEventListener('click', (e) => {
-            if (e.target.classList.contains('disabled')) return;
-            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('active'));
-            e.target.classList.add('active');
-            selectedSlot = {
-                date: e.target.dataset.date,
-                time: e.target.dataset.time
+    calendarGrid.appendChild(daysRow);
+
+    // Default to first available if none selected
+    if (!activeDate && firstAvailableDate) {
+        activeDate = firstAvailableDate;
+        // Mark the card as active in DOM directly for visual consistency
+        const cards = daysRow.querySelectorAll('.day-card:not(.disabled)');
+        if (cards.length > 0) cards[0].classList.add('active');
+    }
+
+    // 2. Create Time Slots Grid
+    if (activeDate) {
+        const slotsContainer = document.createElement('div');
+        slotsContainer.className = 'time-slots-container';
+        slotsContainer.innerHTML = `
+            <div class="time-slots-grid">
+                ${generateTimeSlotHTML(activeDate)}
+            </div>
+        `;
+        calendarGrid.appendChild(slotsContainer);
+
+        // Attach slot click listeners
+        slotsContainer.querySelectorAll('.time-slot').forEach(slot => {
+            slot.onclick = (e) => {
+                if (e.target.classList.contains('disabled')) return;
+                slotsContainer.querySelectorAll('.time-slot').forEach(s => s.classList.remove('active'));
+                e.target.classList.add('active');
+                selectedSlot = {
+                    date: e.target.dataset.date,
+                    time: e.target.dataset.time
+                };
             };
         });
-    });
+    }
 }
 
-function generateTimeSlots(date) {
+function isDayDisabled(date) {
+    const now = new Date();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // If day is before today
+    if (date < today) return true;
+
+    // If day is today and it's after 4:00 PM (16:00)
+    if (date.getTime() === today.getTime()) {
+        if (now.getHours() >= 16) return true;
+    }
+
+    return false;
+}
+
+function generateTimeSlotHTML(date) {
     const slots = [
         "10:00 AM", "11:00 AM", "12:00 PM",
         "02:00 PM", "03:00 PM", "04:00 PM"
     ];
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
 
     return slots.map(time => {
-        const isPast = date < today || (date.getTime() === today.getTime() && isTimeInPast(time));
-        return `<div class="time-slot ${isPast ? 'disabled' : ''}" 
+        const isDisabled = isSlotDisabled(date, time);
+        const activeClass = (selectedSlot && selectedSlot.date === date.toISOString() && selectedSlot.time === time) ? 'active' : '';
+
+        return `<div class="time-slot ${isDisabled ? 'disabled' : ''} ${activeClass}" 
                      data-date="${date.toISOString()}" 
                      data-time="${time}">${time}</div>`;
     }).join('');
 }
 
-function isTimeInPast(timeStr) {
+function isSlotDisabled(date, timeStr) {
     const now = new Date();
-    const [time, modifier] = timeStr.split(' ');
-    let [hours, minutes] = time.split(':');
-    if (hours === '12') hours = '00';
-    if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    const slotTime = new Date();
-    slotTime.setHours(hours, minutes, 0, 0);
-    return slotTime < now;
+    // If day is in the past (already handled by day card, but good for safety)
+    if (date < today) return true;
+
+    // If day is today, check the specific hour
+    if (date.getTime() === today.getTime()) {
+        const [time, modifier] = timeStr.split(' ');
+        let [hours, minutes] = time.split(':');
+        if (hours === '12') hours = '00';
+        if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
+
+        const slotTime = new Date();
+        slotTime.setHours(hours, minutes, 0, 0);
+
+        return slotTime <= now;
+    }
+
+    return false;
 }
 
 // Navigation
