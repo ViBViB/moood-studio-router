@@ -151,7 +151,7 @@ body {
     left: calc(65% + 50px);
     /* 65% is where container starts (100% - 35%), then 50px from that edge */
     bottom: 50px;
-    width: 440px;
+    width: 550px;
     /* Fixed width - will be clipped by clip-path */
     z-index: 3;
     /* Above the container */
