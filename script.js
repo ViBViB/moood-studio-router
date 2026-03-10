@@ -14,8 +14,11 @@ const INITIAL_WIDTH = 35; // Initial content width percentage
 
 // Handle scroll events with progressive animation
 let ticking = false;
+let isPortalActive = false;
 
 function handleScroll() {
+    if (isPortalActive) return;
+
     const scrollY = window.scrollY;
     const isMobile = window.innerWidth <= 768;
 
@@ -399,26 +402,56 @@ document.getElementById('onboardingForm').addEventListener('submit', async (e) =
 
 // Portal controls
 function openPortal() {
-    const portal = document.getElementById('identityPortal');
-    portal.classList.add('active');
+    isPortalActive = true;
     document.body.style.overflow = 'hidden';
 
-    // Ensure sections are reset to default view
-    document.getElementById('portalFormSection').style.display = 'block';
-    document.getElementById('portalSchedulerSection').style.display = 'block';
-    document.getElementById('portalSuccessSection').style.display = 'none';
+    const wrapper = document.getElementById('contentWrapper');
+    const content = document.querySelector('.content');
 
-    // Reset file label and list
-    attachedFiles = [];
-    renderFileList();
+    // Start cinematic expansion
+    wrapper.classList.add('portal-transitioning');
+    wrapper.classList.add('portal-expanded');
+    content.classList.add('content-faded');
 
-    renderCalendar();
+    // Wait for expansion to finish before revealing booking form
+    setTimeout(() => {
+        // Ensure sections are reset to default view
+        document.getElementById('portalFormSection').style.display = 'block';
+        document.getElementById('portalSchedulerSection').style.display = 'block';
+        document.getElementById('portalSuccessSection').style.display = 'none';
+
+        // Reset file label and list
+        attachedFiles = [];
+        renderFileList();
+
+        renderCalendar();
+
+        const portal = document.getElementById('identityPortal');
+        portal.classList.add('active');
+    }, 800);
 }
 
 function closePortal() {
     const portal = document.getElementById('identityPortal');
     portal.classList.remove('active');
-    document.body.style.overflow = '';
+
+    // Wait for form to fade out (0.5s)
+    setTimeout(() => {
+        const wrapper = document.getElementById('contentWrapper');
+        const content = document.querySelector('.content');
+
+        // Reverse cinematic expansion
+        wrapper.classList.remove('portal-expanded');
+        content.classList.remove('content-faded');
+
+        // Wait for contraction to finish (0.8s) before restoring scroll control
+        setTimeout(() => {
+            wrapper.classList.remove('portal-transitioning');
+            document.body.style.overflow = '';
+            isPortalActive = false;
+            handleScroll(); // Recalculate and restore exactly where user left off
+        }, 800);
+    }, 500);
 }
 
 // File Upload handling (State-based Multiple Files)
