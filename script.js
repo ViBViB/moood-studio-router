@@ -317,6 +317,14 @@ ctaButtons.forEach(btn => {
 document.getElementById('onboardingForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    const totalSize = attachedFiles.reduce((sum, file) => sum + file.size, 0);
+    const maxSize = 4 * 1024 * 1024; // 4MB
+
+    if (totalSize > maxSize) {
+        alert("The total file size exceeds the 4MB limit for Strategy Documents. Please remove some files before continuing.");
+        return;
+    }
+
     if (!selectedSlot) {
         alert("Please select a session time.");
         return;
@@ -432,17 +440,45 @@ uploadMoreBtn.addEventListener('click', () => {
     fileInput.click();
 });
 
+function getTotalFilesSize() {
+    return attachedFiles.reduce((sum, file) => sum + file.size, 0);
+}
+
 function renderFileList() {
     fileListContainer.innerHTML = '';
+    const totalSize = getTotalFilesSize();
+    const maxSize = 4 * 1024 * 1024; // 4MB
+    const sizeInMB = (totalSize / (1024 * 1024)).toFixed(2);
+    const dropZoneLabel = document.getElementById('prdUploadLabel');
 
     if (attachedFiles.length === 0) {
         dropZone.style.display = 'block';
         uploadMoreBtn.style.display = 'none';
+        dropZone.style.borderColor = '';
+        dropZoneLabel.textContent = 'Drag & drop your PRD or Project Brief';
+        dropZoneLabel.style.color = '';
         return;
     }
 
     dropZone.style.display = 'none';
     uploadMoreBtn.style.display = 'block';
+
+    // Show size warning if needed
+    if (totalSize > maxSize) {
+        const errorMsg = document.createElement('div');
+        errorMsg.style.color = '#ff4d4d';
+        errorMsg.style.fontSize = '12px';
+        errorMsg.style.marginBottom = '12px';
+        errorMsg.style.textAlign = 'center';
+        errorMsg.style.fontWeight = 'bold';
+        errorMsg.textContent = `❌ LIMIT EXCEEDED: ${sizeInMB}MB of 4MB allowed. Please remove files.`;
+        fileListContainer.appendChild(errorMsg);
+        uploadMoreBtn.style.borderColor = '#ff4d4d';
+        uploadMoreBtn.style.color = '#ff4d4d';
+    } else {
+        uploadMoreBtn.style.borderColor = '';
+        uploadMoreBtn.style.color = '';
+    }
 
     attachedFiles.forEach((file, index) => {
         const item = document.createElement('div');
