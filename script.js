@@ -10,7 +10,7 @@ const MAX_SCROLL = 800; // Pixels to scroll for full animation (Phase 1: content
 const MASONRY_PAUSE_SCROLL = 200; // Additional scroll to view static masonry (Phase 2) - reduced
 const MASONRY_FADEOUT_SCROLL = 600; // Scroll distance for masonry fade-out (Phase 3) - increased
 const INITIAL_ROTATION = -10; // Initial Z-axis rotation in degrees (2D rotation)
-const INITIAL_WIDTH = 33; // Initial content width percentage
+const INITIAL_WIDTH = 45; // Initial content width percentage
 
 // Handle scroll events with progressive animation
 let ticking = false;
@@ -59,7 +59,7 @@ function handleScroll() {
     const viewportWidth = window.innerWidth;
     const containerWidthPx = (contentWidth / 100) * viewportWidth;
 
-    // Initial container width at 33% viewport
+    // Initial container width at 45% viewport
     const initialContainerWidth = (INITIAL_WIDTH / 100) * viewportWidth;
 
     // As container shrinks from right, clip more from the LEFT

@@ -135,7 +135,7 @@ body {
     position: fixed;
     right: 0;
     top: 0;
-    width: 33%;
+    width: 45%;
     height: 100vh;
     z-index: 2;
     background: #fff;
@@ -172,8 +172,8 @@ body {
 /* Content - Fixed to viewport, clipped by JavaScript */
 .content {
     position: fixed;
-    left: calc(67% + 50px);
-    /* 67% is where container starts (100% - 33%), then 50px from that edge */
+    left: calc(55% + 50px);
+    /* 55% is where container starts (100% - 45%), then 50px from that edge */
     bottom: 50px;
     width: 480px;
     /* Fixed width - will be clipped by clip-path */
