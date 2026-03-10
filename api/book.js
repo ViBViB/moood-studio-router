@@ -204,6 +204,8 @@ PRD Attached: ${files.length > 0 ? files[0].name : 'No'}`,
             console.error('Agency Email Catch:', err);
         }
 
+        const googleCalLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Onboarding: ' + companyName + ' & Moood Studio')}&dates=${startDateTime.toISOString().replace(/-|:|\.\d\d\d/g, "")}/${endDateTime.toISOString().replace(/-|:|\.\d\d\d/g, "")}&details=${encodeURIComponent('Your UI/UX onboarding session with Moood Studio. A meeting link will be sent shortly.')}`;
+
         // 4. Send Email Confirmation to CUSTOMER
         const customerEmailContent = `
             <div style="font-family: sans-serif; max-width: 600px; color: #111; line-height: 1.6;">
@@ -211,10 +213,13 @@ PRD Attached: ${files.length > 0 ? files[0].name : 'No'}`,
                 <p>Hello ${fullName},</p>
                 <p>We've successfully received your request. Your <strong>Onboarding Session</strong> with Moood Studio is confirmed for:</p>
                 <div style="background: #f4f4f4; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                    <p style="margin: 0;"><strong>Date:</strong> ${formattedDate}</p>
-                    <p style="margin: 0;"><strong>Time:</strong> ${bookingTime} (GMT)</p>
+                    <p style="margin: 0 0 8px 0;"><strong>Date:</strong> ${formattedDate}</p>
+                    <p style="margin: 0 0 16px 0;"><strong>Time:</strong> ${bookingTime} (GMT)</p>
+                    <a href="${googleCalLink}" target="_blank" style="background-color: #111; color: #fff; padding: 10px 18px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block;">
+                       Add to Google Calendar
+                    </a>
                 </div>
-                <p>Our team is reviewing your information. You will receive a calendar invitation shortly with the meeting link.</p>
+                <p>Our team is reviewing your information. You will receive a formal calendar invitation shortly with the meeting link.</p>
                 <p>Get ready for the takeover.</p>
                 <br>
                 <p>Best regards,<br>The Moood Studio Team</p>
@@ -225,13 +230,13 @@ PRD Attached: ${files.length > 0 ? files[0].name : 'No'}`,
             const { data, error: sendError } = await resend.emails.send({
                 from: 'Moood Studio <notifications@moood.studio>',
                 to: [customerEmail],
-                subject: `Your Booking is Confirmed: ${formattedDate}`,
+                subject: `Your Booking is Confirmed: ${formattedDate} `,
                 html: customerEmailContent
             });
 
             if (sendError) {
                 console.error('Resend Customer Error:', sendError);
-                throw new Error(`Email rejection: ${sendError.message}. (Common cause: ${sendError.name})`);
+                throw new Error(`Email rejection: ${sendError.message}.(Common cause: ${sendError.name})`);
             } else {
                 console.log('Customer Email Sent:', data.id);
             }
