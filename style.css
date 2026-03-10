@@ -151,8 +151,8 @@ body {
     left: calc(65% + 50px);
     /* 65% is where container starts (100% - 35%), then 50px from that edge */
     bottom: 50px;
-    width: 550px;
-    /* Fixed width - will be clipped by clip-path */
+    width: calc(35% - 100px);
+    /* Fluid width to prevent overflowing window on smaller desktops */
     z-index: 3;
     /* Above the container */
     transition: opacity 0.4s ease;
@@ -188,9 +188,9 @@ body {
 }
 
 .headline {
-    font-size: 72px;
+    font-size: clamp(40px, 4.5vw, 72px);
     font-weight: 400;
-    line-height: 1.2;
+    line-height: 1.1;
     margin-bottom: 20px;
     letter-spacing: -0.01em;
     color: #000;
@@ -539,9 +539,9 @@ body {
 
 /* CTA Headline - Same size as main hero headline */
 .cta-headline {
-    font-size: 72px;
+    font-size: clamp(40px, 5vw, 72px);
     font-weight: 400;
-    line-height: 1.2;
+    line-height: 1.1;
     margin-bottom: 40px;
     letter-spacing: -0.01em;
     color: #000;
