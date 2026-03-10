@@ -15,6 +15,7 @@ const INITIAL_WIDTH = 35; // Initial content width percentage
 // Handle scroll events with progressive animation
 let ticking = false;
 let isPortalActive = false;
+let wasMobile = window.innerWidth <= 768;
 
 function handleScroll() {
     if (isPortalActive) return;
@@ -23,6 +24,7 @@ function handleScroll() {
     const isMobile = window.innerWidth <= 768;
 
     if (isMobile) {
+        wasMobile = true;
         // Reset styles for mobile to ensure natural document flow
         masonryWrapper.style.position = 'relative';
         masonryWrapper.style.top = '0';
@@ -41,6 +43,27 @@ function handleScroll() {
             content.style.width = '100%';
         }
         return;
+    }
+
+    if (wasMobile) {
+        wasMobile = false;
+        // Transitioned from mobile to desktop. Clear all inline mobile styles.
+        masonryWrapper.style.position = '';
+        masonryWrapper.style.top = '';
+        masonryWrapper.style.opacity = '';
+        contentWrapper.style.position = '';
+        contentWrapper.style.width = '';
+        contentWrapper.style.height = '';
+        contentWrapper.style.opacity = '';
+        masonryContainer.style.transform = '';
+        const content = document.querySelector('.content');
+        if (content) {
+            content.style.clipPath = '';
+            content.style.position = '';
+            content.style.left = '';
+            content.style.bottom = '';
+            content.style.width = '';
+        }
     }
 
     // PHASE 1: Content disappears + Rotation (0px to MAX_SCROLL)
